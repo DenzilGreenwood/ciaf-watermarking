@@ -220,3 +220,17 @@ exclude_lines = [
     "if TYPE_CHECKING:",
     "@abstractmethod",
 ]
+
+[tool.bandit]
+# Exclude test directories from security scanning
+exclude_dirs = [
+    "test_watermarks",
+    "tests",
+    ".git",
+    ".tox",
+    "build",
+    "dist",
+]
+# Skip B101 (assert_used) - valid in test files
+skips = ["B101"]
+

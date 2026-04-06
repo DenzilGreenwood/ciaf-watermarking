@@ -159,5 +159,5 @@ jobs:
         continue-on-error: true
       
       - name: Run bandit security linter
-        run: bandit -c .bandit -r src/ -f json
+        run: bandit -r src/ --skip B101 -f json
         continue-on-error: true
