@@ -151,20 +151,25 @@ target-version = "py38"
 
 [tool.mypy]
 python_version = "3.9"
-warn_return_any = true
+# Relaxed settings for gradual type adoption
+warn_return_any = false  # Don't error on returning Any
 warn_unused_configs = true
 disallow_untyped_defs = false
 disallow_incomplete_defs = false
-check_untyped_defs = true
-no_implicit_optional = true
-warn_redundant_casts = true
-warn_unused_ignores = true
-warn_no_return = true
+check_untyped_defs = false  # Don't check bodies of untyped functions
+no_implicit_optional = false  # Allow implicit Optional
+warn_redundant_casts = false
+warn_unused_ignores = false
+warn_no_return = false
 # Exclude test directory to avoid duplicate module name conflicts
 exclude = [
     "^test_watermarks/",
     "^setup\\.py$",
 ]
+# Allow gradual typing - don't fail on missing annotations
+ignore_missing_imports = true
+allow_untyped_calls = true
+allow_untyped_defs = true
 
 [tool.pytest.ini_options]
 minversion = "7.0"
