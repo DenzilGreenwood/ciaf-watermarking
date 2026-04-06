@@ -177,8 +177,7 @@ def build_video_artifact_evidence(
 
     else:
         raise ValueError(
-            f"Unknown watermark mode: {watermark_mode}. "
-            f"Use 'metadata', 'visual', or 'hybrid'"
+            f"Unknown watermark mode: {watermark_mode}. " f"Use 'metadata', 'visual', or 'hybrid'"
         )
 
     hash_after = sha256_bytes(watermarked_bytes)

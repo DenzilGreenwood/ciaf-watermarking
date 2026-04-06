@@ -170,9 +170,7 @@ def verify_audio_artifact(
                 try:
                     dist = sum(
                         c1 != c2
-                        for c1, c2 in zip(
-                            suspect_perceptual, evidence.hashes.perceptual_hash_after
-                        )
+                        for c1, c2 in zip(suspect_perceptual, evidence.hashes.perceptual_hash_after)
                     )
                     max_dist = len(suspect_perceptual)
                     similarity = 1.0 - (dist / max_dist)

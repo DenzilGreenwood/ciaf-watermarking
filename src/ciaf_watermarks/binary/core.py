@@ -153,9 +153,7 @@ def build_binary_artifact_evidence(
         metadata={
             "binary_size_bytes": len(binary_bytes),
             "watermarked_size_bytes": len(watermarked_bytes),
-            "file_type": binary_info.get(
-                "file_type", "unknown"
-            ),  # Use 'file_type' to match tests
+            "file_type": binary_info.get("file_type", "unknown"),  # Use 'file_type' to match tests
             "binary_file_type": binary_info.get(
                 "file_type", "unknown"
             ),  # Keep both for compatibility

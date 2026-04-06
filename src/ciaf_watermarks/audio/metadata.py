@@ -180,9 +180,7 @@ def extract_audio_metadata_watermark(audio_bytes: bytes) -> Optional[Dict[str, A
                 "copyright": format_tags.get("copyright"),
                 "description": format_tags.get("description"),
                 "verification_url": (
-                    format_tags.get("copyright", "")
-                    .replace("Verification: ", "")
-                    .strip()
+                    format_tags.get("copyright", "").replace("Verification: ", "").strip()
                     if "Verification:" in format_tags.get("copyright", "")
                     else None
                 ),

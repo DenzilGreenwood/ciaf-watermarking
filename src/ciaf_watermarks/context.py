@@ -84,22 +84,16 @@ class WatermarkContext:
         """
         model_id = os.getenv("CIAF_MODEL_ID") or os.getenv("AI_MODEL_ID")
         model_version = os.getenv("CIAF_MODEL_VERSION") or os.getenv("AI_MODEL_VERSION")
-        actor_id = (
-            os.getenv("CIAF_ACTOR_ID") or os.getenv("USER_ID") or os.getenv("USERNAME")
-        )
+        actor_id = os.getenv("CIAF_ACTOR_ID") or os.getenv("USER_ID") or os.getenv("USERNAME")
 
         if not model_id:
-            raise ValueError(
-                "CIAF_MODEL_ID or AI_MODEL_ID environment variable must be set"
-            )
+            raise ValueError("CIAF_MODEL_ID or AI_MODEL_ID environment variable must be set")
         if not model_version:
             raise ValueError(
                 "CIAF_MODEL_VERSION or AI_MODEL_VERSION environment variable must be set"
             )
         if not actor_id:
-            raise ValueError(
-                "CIAF_ACTOR_ID, USER_ID, or USERNAME environment variable must be set"
-            )
+            raise ValueError("CIAF_ACTOR_ID, USER_ID, or USERNAME environment variable must be set")
 
         # Prefix actor_id with "user:" if not already prefixed
         if ":" not in actor_id:
@@ -218,8 +212,7 @@ def watermark_context(
     if context is None:
         if not all([model_id, model_version, actor_id]):
             raise ValueError(
-                "Either provide a WatermarkContext or all of "
-                "(model_id, model_version, actor_id)"
+                "Either provide a WatermarkContext or all of " "(model_id, model_version, actor_id)"
             )
         context = WatermarkContext(
             model_id=model_id, model_version=model_version, actor_id=actor_id
@@ -411,9 +404,7 @@ def auto_detect_context(user_id: Optional[str] = None) -> WatermarkContext:
     anthropic_model = os.getenv("ANTHROPIC_MODEL")
 
     if not user_id:
-        user_id = (
-            os.getenv("CIAF_ACTOR_ID") or os.getenv("USER_ID") or os.getenv("USERNAME")
-        )
+        user_id = os.getenv("CIAF_ACTOR_ID") or os.getenv("USER_ID") or os.getenv("USERNAME")
 
     if not user_id:
         raise ValueError(
@@ -431,9 +422,7 @@ def auto_detect_context(user_id: Optional[str] = None) -> WatermarkContext:
 
     if anthropic_model:
         # Extract version from model ID
-        version_part = (
-            anthropic_model.split("-")[-1] if "-" in anthropic_model else "latest"
-        )
+        version_part = anthropic_model.split("-")[-1] if "-" in anthropic_model else "latest"
         if version_part.isdigit() and len(version_part) == 8:
             model_version = f"{version_part[:4]}-{version_part[4:6]}"
         else:

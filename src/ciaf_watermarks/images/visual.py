@@ -108,8 +108,7 @@ def apply_visual_watermark(
     """
     if not PIL_AVAILABLE:
         raise ImportError(
-            "Pillow required for image watermarking. "
-            "Install with: pip install Pillow"
+            "Pillow required for image watermarking. " "Install with: pip install Pillow"
         )
 
     # Open image
@@ -125,9 +124,7 @@ def apply_visual_watermark(
         font = ImageFont.truetype("arial.ttf", font_size)
     except Exception:
         try:
-            font = ImageFont.truetype(
-                "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", font_size
-            )
+            font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", font_size)
         except Exception:
             font = ImageFont.load_default()
 
@@ -137,9 +134,7 @@ def apply_visual_watermark(
     text_h = bbox[3] - bbox[1]
 
     # Calculate position
-    x, y = _calculate_position(
-        position, base.width, base.height, text_w, text_h, margin
-    )
+    x, y = _calculate_position(position, base.width, base.height, text_w, text_h, margin)
 
     # Draw text with opacity
     alpha = max(0, min(255, int(255 * opacity)))
@@ -191,9 +186,7 @@ def apply_qr_watermark(
     qr_rgba = qr_img.convert("RGBA")
 
     # Calculate position
-    x, y = _calculate_position(
-        position, base.width, base.height, qr_size, qr_size, margin
-    )
+    x, y = _calculate_position(position, base.width, base.height, qr_size, qr_size, margin)
 
     # Paste QR code
     base.paste(qr_rgba, (x, y), qr_rgba)
@@ -407,9 +400,7 @@ def build_image_artifact_evidence(
 
             if IMAGEHASH_AVAILABLE:
                 phash_b, ahash_b, dhash_b, whash_b = compute_all_hashes(image_bytes)
-                phash_a, ahash_a, dhash_a, whash_a = compute_all_hashes(
-                    watermarked_bytes
-                )
+                phash_a, ahash_a, dhash_a, whash_a = compute_all_hashes(watermarked_bytes)
 
                 # Store in hash set
                 hash_set.perceptual_hash_before = phash_b
@@ -465,9 +456,7 @@ def build_image_artifact_evidence(
         qr_payload=verification_url if qr_bytes else None,
         embed_method=embed_method,
         removal_resistance=removal_resistance,
-        location=(
-            watermark_spec.position if watermark_spec.mode != "steganographic" else None
-        ),
+        location=(watermark_spec.position if watermark_spec.mode != "steganographic" else None),
     )
 
     # Build metadata

@@ -130,8 +130,7 @@ def extract_advanced_audio_features(
     """
     if not LIBROSA_AVAILABLE:
         raise ImportError(
-            "Advanced spectral analysis requires librosa.\n"
-            "Install with: pip install librosa"
+            "Advanced spectral analysis requires librosa.\n" "Install with: pip install librosa"
         )
 
     # Write to temporary file for librosa
@@ -249,14 +248,10 @@ def compare_spectral_features(
 
     # Build feature vectors
     vec1 = np.array(
-        features1.mfcc_mean
-        + features1.chroma_mean
-        + [features1.spectral_centroid, features1.tempo]
+        features1.mfcc_mean + features1.chroma_mean + [features1.spectral_centroid, features1.tempo]
     )
     vec2 = np.array(
-        features2.mfcc_mean
-        + features2.chroma_mean
-        + [features2.spectral_centroid, features2.tempo]
+        features2.mfcc_mean + features2.chroma_mean + [features2.spectral_centroid, features2.tempo]
     )
 
     # Cosine similarity
@@ -327,9 +322,7 @@ def convert_audio_to_wav(
             ac=2,  # Stereo
             acodec="pcm_s16le",  # PCM encoding
         )
-        ffmpeg.run(
-            stream, capture_stdout=True, capture_stderr=True, overwrite_output=True
-        )
+        ffmpeg.run(stream, capture_stdout=True, capture_stderr=True, overwrite_output=True)
 
         # Read output WAV file
         with open(output_path, "rb") as f:
@@ -398,9 +391,7 @@ def convert_video_to_mp4(
             acodec="aac",  # Audio codec
             **{"b:v": "2000k", "b:a": "128k"},  # Bitrates
         )
-        ffmpeg.run(
-            stream, capture_stdout=True, capture_stderr=True, overwrite_output=True
-        )
+        ffmpeg.run(stream, capture_stdout=True, capture_stderr=True, overwrite_output=True)
 
         # Read output MP4 file
         with open(output_path, "rb") as f:
@@ -443,8 +434,7 @@ def compute_video_phash(video_bytes: bytes, num_frames: int = 5) -> List[str]:
     """
     if not IMAGEHASH_AVAILABLE:
         raise ImportError(
-            "Perceptual hashing requires imagehash.\n"
-            "Install with: pip install imagehash"
+            "Perceptual hashing requires imagehash.\n" "Install with: pip install imagehash"
         )
 
     try:
@@ -452,8 +442,7 @@ def compute_video_phash(video_bytes: bytes, num_frames: int = 5) -> List[str]:
         import numpy as np  # noqa: F401
     except ImportError:
         raise ImportError(
-            "Video pHash requires opencv-python.\n"
-            "Install with: pip install opencv-python"
+            "Video pHash requires opencv-python.\n" "Install with: pip install opencv-python"
         )
 
     # Write video to temporary file
@@ -474,8 +463,7 @@ def compute_video_phash(video_bytes: bytes, num_frames: int = 5) -> List[str]:
             frame_indices = list(range(total_frames))
         else:
             frame_indices = [
-                int(total_frames * (i + 1) / (num_frames + 1))
-                for i in range(num_frames)
+                int(total_frames * (i + 1) / (num_frames + 1)) for i in range(num_frames)
             ]
 
         phashes = []
@@ -536,9 +524,7 @@ def compute_audio_chromaprint(audio_bytes: bytes, duration: int = 30) -> str:
 
     try:
         # Compute fingerprint
-        duration_secs, fingerprint = acoustid.fingerprint_file(
-            tmp_path, maxlength=duration
-        )
+        duration_secs, fingerprint = acoustid.fingerprint_file(tmp_path, maxlength=duration)
         return fingerprint
 
     finally:
@@ -548,9 +534,7 @@ def compute_audio_chromaprint(audio_bytes: bytes, duration: int = 30) -> str:
             pass
 
 
-def compare_perceptual_hashes(
-    hash1: str, hash2: str, hash_type: str = "phash"
-) -> float:
+def compare_perceptual_hashes(hash1: str, hash2: str, hash_type: str = "phash") -> float:
     """
     Compare two perceptual hashes and return similarity score.
 
@@ -700,9 +684,7 @@ class CloudFragmentStorage:
                     container=self.container, blob=blob_name
                 )
 
-                blob_client.upload_blob(
-                    fragment_data, metadata=metadata, overwrite=True
-                )
+                blob_client.upload_blob(fragment_data, metadata=metadata, overwrite=True)
 
                 return f"https://{self.blob_service_client.account_name}.blob.core.windows.net/{self.container}/{blob_name}"
 
@@ -763,19 +745,13 @@ class CloudFragmentStorage:
                 if "Contents" not in response:
                     return []
 
-                return [
-                    obj["Key"].replace("fragments/", "") for obj in response["Contents"]
-                ]
+                return [obj["Key"].replace("fragments/", "") for obj in response["Contents"]]
 
             elif self.provider == "azure":
                 # List Azure Blobs
-                container_client = self.blob_service_client.get_container_client(
-                    self.container
-                )
+                container_client = self.blob_service_client.get_container_client(self.container)
 
-                blobs = container_client.list_blobs(
-                    name_starts_with=f"fragments/{prefix}"
-                )
+                blobs = container_client.list_blobs(name_starts_with=f"fragments/{prefix}")
 
                 return [blob.name.replace("fragments/", "") for blob in blobs]
 
@@ -984,9 +960,7 @@ def detect_scene_changes(
 
                 if prev_hist is not None:
                     # Compare histograms (correlation)
-                    hist_diff = 1.0 - cv2.compareHist(
-                        prev_hist, hist, cv2.HISTCMP_CORREL
-                    )
+                    hist_diff = 1.0 - cv2.compareHist(prev_hist, hist, cv2.HISTCMP_CORREL)
 
                     # Compare edge density
                     edge_diff = abs(edge_density - prev_edges)
@@ -1104,9 +1078,7 @@ def analyze_keyframe_transitions(
             brightness_change = abs(brightness2 - brightness1) / 255.0
 
             # Compute optical flow score (simplified)
-            flow = cv2.calcOpticalFlowFarneback(
-                gray1, gray2, None, 0.5, 3, 15, 3, 5, 1.2, 0
-            )
+            flow = cv2.calcOpticalFlowFarneback(gray1, gray2, None, 0.5, 3, 15, 3, 5, 1.2, 0)
             flow_magnitude = np.sqrt(flow[..., 0] ** 2 + flow[..., 1] ** 2)
             optical_flow_score = float(flow_magnitude.mean())
 
@@ -1579,17 +1551,11 @@ def print_feature_status():
     )
 
     print("\n☁️ Cloud Storage:")
-    print(
-        f"  AWS S3: {'✓ Available' if features['aws_s3_storage'] else '✗ Not installed'}"
-    )
-    print(
-        f"  Azure Blob: {'✓ Available' if features['azure_blob_storage'] else '✗ Not installed'}"
-    )
+    print(f"  AWS S3: {'✓ Available' if features['aws_s3_storage'] else '✗ Not installed'}")
+    print(f"  Azure Blob: {'✓ Available' if features['azure_blob_storage'] else '✗ Not installed'}")
 
     print("\n" + "=" * 50)
 
     total = len(features)
     available = sum(features.values())
-    print(
-        f"Overall: {available}/{total} features available ({available/total*100:.0f}%)"
-    )
+    print(f"Overall: {available}/{total} features available ({available/total*100:.0f}%)")

@@ -124,9 +124,7 @@ def gpu_watermark_batch(
 
     # Use ThreadPoolExecutor for I/O-bound operations
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
-        futures = {
-            executor.submit(process_artifact, i): i for i in range(len(artifacts))
-        }
+        futures = {executor.submit(process_artifact, i): i for i in range(len(artifacts))}
 
         for future in concurrent.futures.as_completed(futures):
             success, result = future.result()

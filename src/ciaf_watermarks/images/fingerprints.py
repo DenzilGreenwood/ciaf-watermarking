@@ -89,9 +89,7 @@ def compute_perceptual_hash(image_bytes: bytes, hash_size: int = 8) -> str:
         ImportError: If imagehash not available
     """
     if not IMAGEHASH_AVAILABLE:
-        raise ImportError(
-            "imagehash library required. Install with: pip install imagehash Pillow"
-        )
+        raise ImportError("imagehash library required. Install with: pip install imagehash Pillow")
 
     img = Image.open(BytesIO(image_bytes))
     return str(imagehash.phash(img, hash_size=hash_size))
@@ -157,9 +155,7 @@ def compute_wavelet_hash(image_bytes: bytes, hash_size: int = 8) -> str:
     return str(imagehash.whash(img, hash_size=hash_size))
 
 
-def compute_all_hashes(
-    image_bytes: bytes, hash_size: int = 8
-) -> Tuple[str, str, str, str]:
+def compute_all_hashes(image_bytes: bytes, hash_size: int = 8) -> Tuple[str, str, str, str]:
     """
     Compute all perceptual hashes for image.
 

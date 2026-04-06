@@ -58,9 +58,7 @@ class SignatureMetadata(BaseModel):
     canonicalization_version: str = Field(
         ..., min_length=1, description="Canonicalization version"
     )  # e.g., "RFC8785-like/1.0"
-    key_backend: KeyBackend = Field(
-        ..., description="Key backend"
-    )  # Mandatory for audit trail
+    key_backend: KeyBackend = Field(..., description="Key backend")  # Mandatory for audit trail
 
     # Optional but recommended
     signing_service: Optional[str] = Field(
@@ -125,16 +123,12 @@ class SignatureEnvelope(BaseModel):
     hash_algorithm: str = Field(
         ..., min_length=1, description="Hash algorithm"
     )  # "SHA-256" (const)
-    signature_value: str = Field(
-        ..., description="Signature value"
-    )  # Encoded Ed25519 signature
+    signature_value: str = Field(..., description="Signature value")  # Encoded Ed25519 signature
     signature_encoding: SignatureEncoding = Field(
         ..., description="Signature encoding"
     )  # base64, base64url, or hex
     signed_at: str = Field(..., description="Signing timestamp")  # RFC3339 timestamp
-    metadata: SignatureMetadata = Field(
-        ..., description="Signature metadata"
-    )  # Signature metadata
+    metadata: SignatureMetadata = Field(..., description="Signature metadata")  # Signature metadata
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for JSON serialization."""
@@ -152,9 +146,7 @@ class SignatureEnvelope(BaseModel):
         """Create from dictionary."""
         data_copy = data.copy()
         if "signature_encoding" in data_copy:
-            data_copy["signature_encoding"] = SignatureEncoding(
-                data_copy["signature_encoding"]
-            )
+            data_copy["signature_encoding"] = SignatureEncoding(data_copy["signature_encoding"])
         if "metadata" in data_copy:
             data_copy["metadata"] = SignatureMetadata.from_dict(data_copy["metadata"])
         return cls(**data_copy)

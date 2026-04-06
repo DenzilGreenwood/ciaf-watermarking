@@ -78,9 +78,7 @@ def strip_common_watermarks(text: str) -> str:
     suspect text against pre-watermark hash.
     """
     # Remove footer-style watermarks (---\nAI Provenance...)
-    text = re.sub(
-        r"\n+---+\n+AI Provenance.*$", "", text, flags=re.DOTALL | re.MULTILINE
-    )
+    text = re.sub(r"\n+---+\n+AI Provenance.*$", "", text, flags=re.DOTALL | re.MULTILINE)
 
     # Remove header-style watermarks
     text = re.sub(r"^AI Provenance.*\n+---+\n+", "", text, flags=re.MULTILINE)
@@ -307,9 +305,7 @@ def perceptual_hash_image(data: bytes, algorithm: str = "phash") -> str:
             compute_wavelet_hash,
         )
     except ImportError:
-        raise ImportError(
-            "Image perceptual hashing requires: pip install imagehash Pillow"
-        )
+        raise ImportError("Image perceptual hashing requires: pip install imagehash Pillow")
 
     algorithm = algorithm.lower()
 
@@ -322,9 +318,7 @@ def perceptual_hash_image(data: bytes, algorithm: str = "phash") -> str:
     elif algorithm == "whash":
         return compute_wavelet_hash(data)
     else:
-        raise ValueError(
-            f"Unknown algorithm '{algorithm}'. " f"Use: phash, ahash, dhash, or whash"
-        )
+        raise ValueError(f"Unknown algorithm '{algorithm}'. " f"Use: phash, ahash, dhash, or whash")
 
 
 def perceptual_hash_audio(data: bytes) -> str:
@@ -469,9 +463,7 @@ def perceptual_hash_video(data: bytes) -> str:
         try:
             # Get video metadata to determine sampling interval
             probe = ffmpeg.probe(video_path)
-            video_stream = next(
-                (s for s in probe["streams"] if s["codec_type"] == "video"), None
-            )
+            video_stream = next((s for s in probe["streams"] if s["codec_type"] == "video"), None)
 
             if not video_stream:
                 # No video stream found, fall back to content hash
@@ -615,14 +607,8 @@ def minhash_similarity(hash1: str, hash2: str) -> float:
     sig2_bytes = base64.b64decode(hash2)
 
     # Convert back to list of ints
-    sig1 = [
-        int.from_bytes(sig1_bytes[i : i + 4], "big")
-        for i in range(0, len(sig1_bytes), 4)
-    ]
-    sig2 = [
-        int.from_bytes(sig2_bytes[i : i + 4], "big")
-        for i in range(0, len(sig2_bytes), 4)
-    ]
+    sig1 = [int.from_bytes(sig1_bytes[i : i + 4], "big") for i in range(0, len(sig1_bytes), 4)]
+    sig2 = [int.from_bytes(sig2_bytes[i : i + 4], "big") for i in range(0, len(sig2_bytes), 4)]
 
     return MinHash.jaccard_similarity(sig1, sig2)
 

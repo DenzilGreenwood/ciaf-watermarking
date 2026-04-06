@@ -80,9 +80,7 @@ def verify_text_artifact(
     if match_before and not match_after:
         likely_removed = True
         notes.append("[WARN] Watermark likely removed!")
-        notes.append(
-            "  Content matches pre-watermark version but watermark is missing."
-        )
+        notes.append("  Content matches pre-watermark version but watermark is missing.")
 
     # Check 4: Watermark presence
     watermark_present = has_watermark(suspect_text)
@@ -138,15 +136,11 @@ def verify_text_artifact(
     # Check 7: Content modification analysis
     content_modified = False
     if not match_before and not match_after:
-        if normalized_match_before or (
-            perceptual_similarity and perceptual_similarity > 0.8
-        ):
+        if normalized_match_before or (perceptual_similarity and perceptual_similarity > 0.8):
             content_modified = True
             notes.append("[WARN] Content appears modified from original.")
         else:
-            notes.append(
-                "[FAIL] No match found - content may be unrelated or heavily modified."
-            )
+            notes.append("[FAIL] No match found - content may be unrelated or heavily modified.")
 
     # Determine overall confidence
     confidence = 0.0
@@ -277,9 +271,7 @@ def analyze_suspect_text(suspect_text: str) -> dict:
     return analysis
 
 
-def format_verification_report(
-    result: VerificationResult, detailed: bool = True
-) -> str:
+def format_verification_report(result: VerificationResult, detailed: bool = True) -> str:
     """
     Format verification result as human-readable report.
 
@@ -315,9 +307,7 @@ def format_verification_report(
     lines.append(
         f"  Watermark present:          {'[OK]' if result.watermark_present else '[FAIL]'}"
     )
-    lines.append(
-        f"  Watermark intact:           {'[OK]' if result.watermark_intact else '[FAIL]'}"
-    )
+    lines.append(f"  Watermark intact:           {'[OK]' if result.watermark_intact else '[FAIL]'}")
 
     if result.likely_tag_removed:
         lines.append("")

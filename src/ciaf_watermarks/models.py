@@ -155,12 +155,8 @@ class ForensicFragment(BaseModel):
     fragment_id: str  # Unique fragment identifier (e.g., 'frag_0_begin')
     fragment_type: str  # 'text', 'image_patch', 'video_frame', 'audio_segment'
     entropy_score: float  # 0.0-1.0 (1.0 = highest unique content)
-    sampling_method: (
-        str  # e.g., 'begin', 'middle', 'end' for text; 'spatial' for images
-    )
-    content_position: (
-        int  # For text: char offset; for image: patch index; for video: frame number
-    )
+    sampling_method: str  # e.g., 'begin', 'middle', 'end' for text; 'spatial' for images
+    content_position: int  # For text: char offset; for image: patch index; for video: frame number
 
 
 class TextForensicFragment(ForensicFragment):
@@ -324,10 +320,7 @@ class ForensicFragmentSet(BaseModel):
     def all_fragments(self) -> List[ForensicFragment]:
         """Get all fragments regardless of type."""
         return (
-            self.text_fragments
-            + self.image_fragments
-            + self.video_snippets
-            + self.audio_segments
+            self.text_fragments + self.image_fragments + self.video_snippets + self.audio_segments
         )
 
 
@@ -426,9 +419,7 @@ class ArtifactEvidence(BaseModel):
     prior_receipt_hash: Optional[str] = None
 
     # Signature (✅ Updated to SignatureEnvelope pattern for v1.3.0)
-    signature: Optional[Any] = (
-        None  # SignatureEnvelope type - using Any to avoid circular import
-    )
+    signature: Optional[Any] = None  # SignatureEnvelope type - using Any to avoid circular import
     merkle_leaf_hash: Optional[str] = None
 
     def to_canonical_dict(self) -> Dict[str, Any]:
@@ -538,10 +529,7 @@ class VerificationResult(BaseModel):
         return (
             self.exact_match_after_watermark
             or self.exact_match_before_watermark
-            or (
-                self.perceptual_similarity_score
-                and self.perceptual_similarity_score > 0.9
-            )
+            or (self.perceptual_similarity_score and self.perceptual_similarity_score > 0.9)
             or (self.normalized_match_before or self.normalized_match_after)
         )
 
@@ -570,9 +558,7 @@ class ForensicArtifactProfile(BaseModel):
 
     # Watermark detection
     watermark_presence_expected: bool = True
-    watermark_locator: Optional[Dict[str, Any]] = (
-        None  # Describes where to find watermark
-    )
+    watermark_locator: Optional[Dict[str, Any]] = None  # Describes where to find watermark
 
     # Embedding reference (for neural network similarity)
     embedding_reference: Optional[str] = None  # Reference to stored embedding vector

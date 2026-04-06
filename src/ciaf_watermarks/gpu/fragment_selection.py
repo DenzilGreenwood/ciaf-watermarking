@@ -65,9 +65,7 @@ def gpu_select_image_fragments(
     if len(img_array.shape) == 3:
         # Convert RGB to grayscale for complexity calculation
         img_gray = (
-            0.299 * img_array[:, :, 0]
-            + 0.587 * img_array[:, :, 1]
-            + 0.114 * img_array[:, :, 2]
+            0.299 * img_array[:, :, 0] + 0.587 * img_array[:, :, 1] + 0.114 * img_array[:, :, 2]
         )
     else:
         img_gray = img_array
@@ -212,11 +210,7 @@ def gpu_select_video_fragments(
         for i, frame in enumerate(frames_tensor):
             # Convert to grayscale if RGB
             if len(frame.shape) == 3:
-                gray = (
-                    0.299 * frame[:, :, 0]
-                    + 0.587 * frame[:, :, 1]
-                    + 0.114 * frame[:, :, 2]
-                )
+                gray = 0.299 * frame[:, :, 0] + 0.587 * frame[:, :, 1] + 0.114 * frame[:, :, 2]
             else:
                 gray = frame
 

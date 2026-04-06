@@ -432,9 +432,7 @@ class WatermarkDispatcher:
             **common_params,
             watermark_mode=merged_config.get("mode", "metadata"),
             watermark_config=merged_config,
-            enable_forensic_fragments=merged_config.get(
-                "enable_forensic_fragments", True
-            ),
+            enable_forensic_fragments=merged_config.get("enable_forensic_fragments", True),
         )
 
 

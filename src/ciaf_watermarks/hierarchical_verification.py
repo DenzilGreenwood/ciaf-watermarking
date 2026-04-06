@@ -84,9 +84,7 @@ class HierarchicalVerificationResult(BaseModel):
     artifact_id: str = Field(..., min_length=1, description="Artifact identifier")
     final_tier: VerificationTier = Field(..., description="Final tier reached")
     is_authentic: bool = Field(..., description="Is artifact authentic")
-    overall_confidence: float = Field(
-        ..., ge=0.0, le=1.0, description="Overall confidence"
-    )
+    overall_confidence: float = Field(..., ge=0.0, le=1.0, description="Overall confidence")
 
     # Tier execution details
     tier1_result: Optional[VerificationStep] = Field(None, description="Tier 1 result")
@@ -94,17 +92,13 @@ class HierarchicalVerificationResult(BaseModel):
     tier3_result: Optional[VerificationStep] = Field(None, description="Tier 3 result")
 
     # Cost tracking
-    total_execution_time_ms: float = Field(
-        0.0, ge=0.0, description="Total execution time"
-    )
+    total_execution_time_ms: float = Field(0.0, ge=0.0, description="Total execution time")
     tier1_cost_ms: float = Field(0.0, ge=0.0, description="Tier 1 cost")
     tier2_cost_ms: float = Field(0.0, ge=0.0, description="Tier 2 cost")
     tier3_cost_ms: float = Field(0.0, ge=0.0, description="Tier 3 cost")
 
     # Detailed findings
-    steps: List[VerificationStep] = Field(
-        default_factory=list, description="Verification steps"
-    )
+    steps: List[VerificationStep] = Field(default_factory=list, description="Verification steps")
     tier2_fragment_results: Optional[ForensicVerificationSummary] = Field(
         None, description="Tier 2 fragment results"
     )
@@ -114,9 +108,7 @@ class HierarchicalVerificationResult(BaseModel):
 
     # Notes for audit trail
     notes: List[str] = Field(default_factory=list, description="Verification notes")
-    evidence_record: Optional[ArtifactEvidence] = Field(
-        None, description="Evidence record"
-    )
+    evidence_record: Optional[ArtifactEvidence] = Field(None, description="Evidence record")
 
     def to_dict(self) -> Dict:
         """Convert to dictionary for storage/logging."""
@@ -339,9 +331,7 @@ def _verify_tier3_similarity(
         similarity = 1.0 - (distance / 100.0)
         confidence = 0.95
         matched = True
-        details = (
-            f"SimHash similarity: distance={distance}, similarity={similarity:.1%}"
-        )
+        details = f"SimHash similarity: distance={distance}, similarity={similarity:.1%}"
 
     elif distance <= 15:
         similarity = 1.0 - (distance / 64.0)
@@ -441,8 +431,8 @@ def verify_text_artifact_hierarchical(
     # TIER 2: DNA FRAGMENT SAMPLING (MEDIUM COST)
     # ========================================================================
 
-    tier2_matched, tier2_conf, tier2_details, tier2_time, frag_results = (
-        _verify_tier2_fragments(suspect_text, evidence)
+    tier2_matched, tier2_conf, tier2_details, tier2_time, frag_results = _verify_tier2_fragments(
+        suspect_text, evidence
     )
 
     tier2_step = VerificationStep(
@@ -467,9 +457,7 @@ def verify_text_artifact_hierarchical(
         result.notes.append(f"✓ Tier 2 Match: {tier2_details}")
         result.notes.append(f"  Execution: {tier2_time:.2f} ms")
         if frag_results:
-            result.notes.append(
-                f"  Legal defensibility: {frag_results.legal_defensibility}"
-            )
+            result.notes.append(f"  Legal defensibility: {frag_results.legal_defensibility}")
         return result
 
     # ========================================================================
@@ -540,9 +528,7 @@ def verify_image_artifact_hierarchical(
         is_authentic=False,
         overall_confidence=0.0,
     )
-    result.notes.append(
-        "Image hierarchical verification: Phase 2 - Not yet implemented"
-    )
+    result.notes.append("Image hierarchical verification: Phase 2 - Not yet implemented")
     return result
 
 
@@ -564,9 +550,7 @@ def format_hierarchical_verification_report(
     lines.append("=" * 70)
 
     lines.append(f"\nArtifact ID: {result.artifact_id}")
-    lines.append(
-        f"Result: {'✓ AUTHENTIC' if result.is_authentic else '✗ NOT AUTHENTIC'}"
-    )
+    lines.append(f"Result: {'✓ AUTHENTIC' if result.is_authentic else '✗ NOT AUTHENTIC'}")
     lines.append(f"Overall Confidence: {result.overall_confidence:.1%}")
     lines.append(f"Final Tier: {result.final_tier.value.upper()}")
 

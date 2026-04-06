@@ -191,10 +191,7 @@ class WatermarkVaultAdapter:
                     data = json.load(f)
 
                 if data.get("model_id") == model_id:
-                    if (
-                        model_version is None
-                        or data.get("model_version") == model_version
-                    ):
+                    if model_version is None or data.get("model_version") == model_version:
                         evidence = self._dict_to_evidence(data)
                         results.append(evidence)
 
@@ -212,19 +209,14 @@ class WatermarkVaultAdapter:
         results = []
 
         try:
-            records = self.vault_storage.get_model_metadata(
-                model_name=model_id, limit=limit
-            )
+            records = self.vault_storage.get_model_metadata(model_name=model_id, limit=limit)
 
             for record in records:
                 metadata = record.get("metadata", {})
                 evidence_dict = metadata.get("evidence")
 
                 if evidence_dict:
-                    if (
-                        model_version is None
-                        or evidence_dict.get("model_version") == model_version
-                    ):
+                    if model_version is None or evidence_dict.get("model_version") == model_version:
                         evidence = self._dict_to_evidence(evidence_dict)
                         results.append(evidence)
 

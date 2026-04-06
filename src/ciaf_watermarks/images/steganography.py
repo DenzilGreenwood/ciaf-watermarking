@@ -105,9 +105,7 @@ def embed_watermark_lsb(
         SteganographyError: If embedding fails or image too small
     """
     if not PIL_AVAILABLE:
-        raise SteganographyError(
-            "Pillow not installed. Install with: pip install Pillow"
-        )
+        raise SteganographyError("Pillow not installed. Install with: pip install Pillow")
 
     # Create payload
     payload = {
@@ -200,9 +198,7 @@ def extract_watermark_lsb(image_bytes: bytes) -> Optional[dict]:
         SteganographyError: If extraction fails
     """
     if not PIL_AVAILABLE:
-        raise SteganographyError(
-            "Pillow not installed. Install with: pip install Pillow"
-        )
+        raise SteganographyError("Pillow not installed. Install with: pip install Pillow")
 
     try:
         img = Image.open(BytesIO(image_bytes))
@@ -272,9 +268,7 @@ def extract_watermark_lsb(image_bytes: bytes) -> Optional[dict]:
         # Verify checksum if present
         if "checksum" in payload:
             stored_checksum = payload.pop("checksum")
-            computed_checksum = _compute_checksum(
-                json.dumps(payload, separators=(",", ":"))
-            )
+            computed_checksum = _compute_checksum(json.dumps(payload, separators=(",", ":")))
 
             if stored_checksum != computed_checksum:
                 raise SteganographyError(

@@ -76,16 +76,12 @@ class ProcessingTask:
         return {
             "artifact_id": self.artifact_id,
             "evidence": self.evidence.to_dict(),
-            "artifact": (
-                self.artifact if isinstance(self.artifact, str) else self.artifact.hex()
-            ),
+            "artifact": (self.artifact if isinstance(self.artifact, str) else self.artifact.hex()),
             "artifact_is_bytes": isinstance(self.artifact, bytes),
             "status": self.status.value,
             "created_at": self.created_at.isoformat(),
             "started_at": self.started_at.isoformat() if self.started_at else None,
-            "completed_at": (
-                self.completed_at.isoformat() if self.completed_at else None
-            ),
+            "completed_at": (self.completed_at.isoformat() if self.completed_at else None),
             "retry_count": self.retry_count,
             "max_retries": self.max_retries,
             "error_message": self.error_message,
@@ -113,14 +109,10 @@ class ProcessingTask:
             status=ProcessingStatus(data["status"]),
             created_at=datetime.fromisoformat(data["created_at"]),
             started_at=(
-                datetime.fromisoformat(data["started_at"])
-                if data.get("started_at")
-                else None
+                datetime.fromisoformat(data["started_at"]) if data.get("started_at") else None
             ),
             completed_at=(
-                datetime.fromisoformat(data["completed_at"])
-                if data.get("completed_at")
-                else None
+                datetime.fromisoformat(data["completed_at"]) if data.get("completed_at") else None
             ),
             retry_count=data.get("retry_count", 0),
             max_retries=data.get("max_retries", 3),
@@ -168,9 +160,7 @@ class InMemoryCache:
             ttl_seconds: Time-to-live in seconds (uses default if None)
         """
         with self._lock:
-            expiry = datetime.utcnow() + timedelta(
-                seconds=ttl_seconds or self.default_ttl
-            )
+            expiry = datetime.utcnow() + timedelta(seconds=ttl_seconds or self.default_ttl)
             self._cache[key] = {
                 "value": value,
                 "expiry": expiry,
@@ -226,9 +216,7 @@ class InMemoryCache:
 
             with self._lock:
                 now = datetime.utcnow()
-                expired_keys = [
-                    key for key, entry in self._cache.items() if now > entry["expiry"]
-                ]
+                expired_keys = [key for key, entry in self._cache.items() if now > entry["expiry"]]
 
                 for key in expired_keys:
                     del self._cache[key]
@@ -308,9 +296,7 @@ class BackgroundWorker:
         self._task_queue.put((priority, task.artifact_id, task))
 
         # Cache the task
-        self.cache.set(
-            f"task:{task.artifact_id}", task.to_dict(), ttl_seconds=7200  # 2 hours
-        )
+        self.cache.set(f"task:{task.artifact_id}", task.to_dict(), ttl_seconds=7200)  # 2 hours
 
     def _worker_loop(self) -> None:
         """Main worker loop - processes tasks from queue."""
@@ -338,9 +324,7 @@ class BackgroundWorker:
 
                     # Clean up after successful completion
                     # Keep task for 10 minutes for status queries
-                    self.cache.set(
-                        f"task:{artifact_id}", task.to_dict(), ttl_seconds=600
-                    )
+                    self.cache.set(f"task:{artifact_id}", task.to_dict(), ttl_seconds=600)
 
                 except Exception as e:
                     # Handle failure
@@ -410,9 +394,7 @@ def get_async_infrastructure() -> tuple[InMemoryCache, BackgroundWorker]:
         from .vault_adapter import create_watermark_vault
 
         vault = create_watermark_vault()
-        _GLOBAL_WORKER = BackgroundWorker(
-            cache=_GLOBAL_CACHE, vault_adapter=vault, max_workers=2
-        )
+        _GLOBAL_WORKER = BackgroundWorker(cache=_GLOBAL_CACHE, vault_adapter=vault, max_workers=2)
         _GLOBAL_WORKER.start()
 
     return _GLOBAL_CACHE, _GLOBAL_WORKER

@@ -22,7 +22,6 @@ from .models import (
     ForensicFragmentSet,
 )
 
-
 # ============================================================================
 # ID VALIDATION
 # ============================================================================
@@ -252,9 +251,7 @@ def validate_artifact_evidence(evidence: ArtifactEvidence) -> List[str]:
 
     # Validate forensic fragments if present
     if evidence.hashes.forensic_fragments:
-        fragment_errors = validate_forensic_fragment_set(
-            evidence.hashes.forensic_fragments
-        )
+        fragment_errors = validate_forensic_fragment_set(evidence.hashes.forensic_fragments)
         errors.extend(fragment_errors)
 
     return errors
@@ -285,8 +282,7 @@ def validate_forensic_fragment_set(
     # Validate entropy threshold
     if not 0.0 <= fragment_set.min_entropy_threshold <= 1.0:
         errors.append(
-            f"min_entropy_threshold must be 0.0-1.0, "
-            f"got {fragment_set.min_entropy_threshold}"
+            f"min_entropy_threshold must be 0.0-1.0, " f"got {fragment_set.min_entropy_threshold}"
         )
 
     # Validate individual fragments
@@ -398,9 +394,7 @@ def generate_compliance_report(evidence: ArtifactEvidence) -> Dict[str, Any]:
         "errors": errors,
         "checks": {
             "artifact_id_format": validate_artifact_id(evidence.artifact_id)[0],
-            "watermark_id_format": validate_watermark_id(
-                evidence.watermark.watermark_id
-            )[0],
+            "watermark_id_format": validate_watermark_id(evidence.watermark.watermark_id)[0],
             "timestamp_format": validate_iso8601_timestamp(evidence.created_at)[0],
             "dual_state_hashes_present": bool(
                 evidence.hashes.content_hash_before_watermark

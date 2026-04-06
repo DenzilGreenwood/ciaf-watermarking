@@ -64,7 +64,9 @@ def verify_video_artifact(
             normalized_match_after = True
             notes.append("Video metadata watermark matches evidence record.")
         else:
-            notes.append("Video contains watermark metadata, but watermark_id does not match evidence.")
+            notes.append(
+                "Video contains watermark metadata, but watermark_id does not match evidence."
+            )
 
     # Tier 3: perceptual comparison
     if evidence.hashes.perceptual_hash_after:
@@ -89,7 +91,8 @@ def verify_video_artifact(
         notes.append("Keyframe fragment matching not yet implemented.")
 
     content_modified = not (
-        normalized_match_after or (perceptual_similarity_score and perceptual_similarity_score > 0.0)
+        normalized_match_after
+        or (perceptual_similarity_score and perceptual_similarity_score > 0.0)
     )
 
     confidence = 0.0

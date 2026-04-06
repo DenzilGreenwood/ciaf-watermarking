@@ -249,12 +249,8 @@ def compute_image_patch_entropy(
 
         # Spatial diversity: gradient edges
         edges = np.zeros_like(patch[:, :, 0], dtype=float)
-        edges[:-1, :] += np.abs(
-            patch[1:, :, 0].astype(float) - patch[:-1, :, 0].astype(float)
-        )
-        edges[:, :-1] += np.abs(
-            patch[:, 1:, 0].astype(float) - patch[:, :-1, 0].astype(float)
-        )
+        edges[:-1, :] += np.abs(patch[1:, :, 0].astype(float) - patch[:-1, :, 0].astype(float))
+        edges[:, :-1] += np.abs(patch[:, 1:, 0].astype(float) - patch[:, :-1, 0].astype(float))
 
         edge_strength = np.mean(edges) / 255.0
 
@@ -326,9 +322,7 @@ def select_image_forensic_patches(
 
         for idx, (patch_x, patch_y, entropy) in enumerate(selected):
             # Extract patch and compute hash (fixed off-by-one error)
-            patch_image = img_array[
-                patch_y : patch_y + patch_size, patch_x : patch_x + patch_size
-            ]
+            patch_image = img_array[patch_y : patch_y + patch_size, patch_x : patch_x + patch_size]
             patch_bytes = patch_image.tobytes()
             patch_hash = sha256_bytes(patch_bytes)
 
@@ -409,9 +403,7 @@ def select_video_forensic_snippets(
         cap = cv2.VideoCapture(tmp_path)
 
         if not cap.isOpened():
-            raise ValueError(
-                "Failed to open video file - may be corrupted or unsupported format"
-            )
+            raise ValueError("Failed to open video file - may be corrupted or unsupported format")
 
         # Get video properties
         total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
@@ -426,8 +418,7 @@ def select_video_forensic_snippets(
         else:
             # Distribute evenly: 25%, 50%, 75%, etc.
             frame_indices = [
-                int(total_frames * (i + 1) / (num_keyframes + 1))
-                for i in range(num_keyframes)
+                int(total_frames * (i + 1) / (num_keyframes + 1)) for i in range(num_keyframes)
             ]
 
         snippets = []
@@ -481,9 +472,7 @@ def select_video_forensic_snippets(
                 frame_index=frame_idx,
                 frame_type="I-Frame",  # Simplified - treating all samples as keyframes
                 frame_duration_ms=(
-                    int(1000 / fps)
-                    if idx == 0
-                    else timestamp_ms - snippets[idx - 1].timestamp_ms
+                    int(1000 / fps) if idx == 0 else timestamp_ms - snippets[idx - 1].timestamp_ms
                 ),
                 frame_patch_hashes=patch_hashes,
                 temporal_motion_hash=motion_hash,
@@ -658,8 +647,7 @@ def select_audio_forensic_segments(
 
                 # Calculate segment positions (evenly distributed)
                 segment_positions_ms = [
-                    int(duration_ms * (i + 1) / (num_segments + 1))
-                    for i in range(num_segments)
+                    int(duration_ms * (i + 1) / (num_segments + 1)) for i in range(num_segments)
                 ]
 
                 segments = []
@@ -698,9 +686,7 @@ def select_audio_forensic_segments(
                         sampling_method="temporal_spectral",
                         content_position=start_frame,
                         start_time_ms=start_ms,
-                        segment_duration_ms=min(
-                            segment_duration_ms, duration_ms - start_ms
-                        ),
+                        segment_duration_ms=min(segment_duration_ms, duration_ms - start_ms),
                         spectrogram_hash=segment_hash,
                         frequency_centroid=spectral_features["frequency_centroid"],
                         spectral_flatness=spectral_features["spectral_flatness"],
@@ -851,9 +837,7 @@ def create_forensic_fragment_set(
 
     try:
         if artifact_type == "text":
-            artifact_text = (
-                artifact.decode("utf-8") if isinstance(artifact, bytes) else artifact
-            )
+            artifact_text = artifact.decode("utf-8") if isinstance(artifact, bytes) else artifact
             fragments = select_text_forensic_fragments(
                 artifact_text,
                 fragment_hash_before="",  # Computed by caller
@@ -879,9 +863,9 @@ def create_forensic_fragment_set(
 
         # Compute aggregate statistics
         if fragment_set.all_fragments:
-            avg_entropy = sum(
-                f.entropy_score for f in fragment_set.all_fragments
-            ) / len(fragment_set.all_fragments)
+            avg_entropy = sum(f.entropy_score for f in fragment_set.all_fragments) / len(
+                fragment_set.all_fragments
+            )
             fragment_set.cumulative_entropy_score = avg_entropy
 
         return fragment_set if fragment_set.fragment_count > 0 else None

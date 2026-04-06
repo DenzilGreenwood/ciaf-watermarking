@@ -126,6 +126,7 @@ def main():
         print("-" * 60)
         try:
             from ciaf_watermarks import detect_artifact_type
+
             result = detect_artifact_type("Sample text")
             print(f"✓ detect_artifact_type('Sample text') = {result}")
             print()

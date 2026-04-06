@@ -62,9 +62,7 @@ def _apply_header_watermark(
     verification_url: str,
 ) -> str:
     """Apply header-style watermark."""
-    header = (
-        f"AI Provenance Tag: {watermark_id}\n" f"Verify: {verification_url}\n" "---\n\n"
-    )
+    header = f"AI Provenance Tag: {watermark_id}\n" f"Verify: {verification_url}\n" "---\n\n"
     return header + text
 
 
@@ -151,9 +149,7 @@ def remove_watermark(text: str) -> str:
         Text with watermark removed
     """
     # Remove footer watermarks
-    text = re.sub(
-        r"\n+---+\n+AI Provenance Tag:.*$", "", text, flags=re.DOTALL | re.MULTILINE
-    )
+    text = re.sub(r"\n+---+\n+AI Provenance Tag:.*$", "", text, flags=re.DOTALL | re.MULTILINE)
 
     # Remove header watermarks
     text = re.sub(r"^AI Provenance Tag:.*?\n+---+\n+", "", text, flags=re.MULTILINE)

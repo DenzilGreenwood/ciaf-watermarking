@@ -46,14 +46,10 @@ class FragmentMatchResult(BaseModel):
 class ForensicVerificationSummary(BaseModel):
     """Summary of forensic fragment verification."""
 
-    total_fragments_checked: int = Field(
-        ..., ge=0, description="Total fragments checked"
-    )
+    total_fragments_checked: int = Field(..., ge=0, description="Total fragments checked")
     fragments_matched: int = Field(..., ge=0, description="Fragments matched")
     fragments_not_matched: int = Field(..., ge=0, description="Fragments not matched")
-    match_confidence: float = Field(
-        ..., ge=0.0, le=1.0, description="Overall confidence"
-    )
+    match_confidence: float = Field(..., ge=0.0, le=1.0, description="Overall confidence")
     legal_defensibility: str = Field(..., description="Legal defensibility level")
     forensic_matches: List[FragmentMatchResult] = Field(
         default_factory=list, description="Forensic matches"
@@ -158,9 +154,7 @@ def verify_text_fragments(
     for fragment in stored_fragments:
         # ✅ FIX #161: Use actual fragment text for sliding window matching
         # (Previously passed fragment_hash_before which is a 64-char SHA-256 hex string)
-        match_result = verify_text_fragment_sliding_window(
-            suspect_text, fragment.fragment_text
-        )
+        match_result = verify_text_fragment_sliding_window(suspect_text, fragment.fragment_text)
 
         if match_result:
             pos, confidence = match_result
@@ -306,10 +300,7 @@ def verify_image_fragment_spatial_search(
                 patch_hash = sha256_bytes(patch_bytes)
 
                 # Exact match (fastest path)
-                if (
-                    patch_hash == expected_hash_before
-                    or patch_hash == expected_hash_after
-                ):
+                if patch_hash == expected_hash_before or patch_hash == expected_hash_after:
                     return ((x, y), 1.0)
 
         return None
@@ -343,9 +334,7 @@ def verify_image_fragments(
     matches_found = 0
 
     for fragment in stored_fragments:
-        match_result = verify_image_fragment_spatial_search(
-            suspect_image_bytes, fragment
-        )
+        match_result = verify_image_fragment_spatial_search(suspect_image_bytes, fragment)
 
         if match_result:
             (x, y), confidence = match_result

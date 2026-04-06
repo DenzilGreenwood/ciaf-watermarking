@@ -108,9 +108,7 @@ def apply_video_visual_watermark(
             "center": ("(w-text_w)/2", "(h-text_h)/2"),
         }
 
-        x_pos, y_pos = position_map.get(
-            watermark_spec.position, position_map["bottom_right"]
-        )
+        x_pos, y_pos = position_map.get(watermark_spec.position, position_map["bottom_right"])
 
         r, g, b = watermark_spec.font_color
         color_hex = f"{r:02x}{g:02x}{b:02x}"

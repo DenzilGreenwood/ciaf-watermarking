@@ -68,8 +68,7 @@ def _check_dependencies():
     """Check if required dependencies are available."""
     if not PYPDF_AVAILABLE:
         raise ImportError(
-            "pypdf or PyPDF2 required for PDF watermarking. "
-            "Install with: pip install pypdf"
+            "pypdf or PyPDF2 required for PDF watermarking. " "Install with: pip install pypdf"
         )
     if not REPORTLAB_AVAILABLE:
         raise ImportError(
