@@ -1,0 +1,113 @@
+name: Build and Test Release Candidate
+
+on:
+  push:
+    tags:
+      - 'v*-rc*'  # Triggers on release candidate tags like v1.4.0-rc1
+
+jobs:
+  test:
+    name: Run Full Test Suite
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+      
+      - name: Install full dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .[full,dev]
+      
+      - name: Run verification script
+        run: python verify_install.py
+      
+      - name: Run full test suite
+        run: |
+          pytest test_watermarks/ -v --cov=. --cov-report=html --cov-report=xml
+      
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report-py${{ matrix.python-version }}
+          path: htmlcov/
+
+  build:
+    name: Build Release Candidate
+    needs: test
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      
+      - name: Install build tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install build twine
+      
+      - name: Build distributions
+        run: python -m build
+      
+      - name: Check distributions
+        run: twine check dist/*
+      
+      - name: Upload distributions
+        uses: actions/upload-artifact@v4
+        with:
+          name: rc-distributions
+          path: dist/
+
+  publish-to-testpypi:
+    name: Publish RC to TestPyPI
+    needs: build
+    runs-on: ubuntu-latest
+    
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/ciaf-watermarks
+    
+    permissions:
+      id-token: write
+    
+    steps:
+      - name: Download distributions
+        uses: actions/download-artifact@v4
+        with:
+          name: rc-distributions
+          path: dist/
+      
+      - name: Publish to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          skip-existing: true
+      
+      - name: Comment on commit
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.repos.createCommitComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: context.sha,
+              body: '🚀 Release candidate published to TestPyPI: https://test.pypi.org/project/ciaf-watermarks/'
+            })

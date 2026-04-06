@@ -9,6 +9,9 @@ CIAF Watermarks is a forensic provenance package for AI-generated artifacts. It 
 [![License: BUSL-1.1](https://img.shields.io/badge/License-BUSL--1.1-blue.svg)](LICENSE)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![Code Coverage](https://img.shields.io/badge/coverage-95%25-brightgreen.svg)](#testing)
+[![Tests](https://github.com/DenzilGreenwood/ciaf-watermarking/workflows/Tests/badge.svg)](https://github.com/DenzilGreenwood/ciaf-watermarking/actions/workflows/test.yml)
+[![PyPI](https://img.shields.io/pypi/v/ciaf-watermarks.svg)](https://pypi.org/project/ciaf-watermarks/)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/ciaf-watermarks.svg)](https://pypi.org/project/ciaf-watermarks/)
 
 ---
 

@@ -1,0 +1,40 @@
+# MANIFEST.in - Specify additional files to include in distribution
+# This ensures documentation, schemas, and configuration files are packaged
+
+# Core documentation
+include README.md
+include LICENSE
+include SCHEMA.md
+include SCHEMA_QUICK_REF.md
+include SCHEMA_REVIEW_SUMMARY.md
+
+# Configuration files
+include .flake8
+include ruff.toml
+include pyproject.toml
+
+# Test documentation
+include test_watermarks/TEST_README.md
+include test_watermarks/conftest.py
+
+# Exclude unwanted files
+exclude .gitignore
+exclude setup.py
+
+# Exclude test outputs and caches
+recursive-exclude test_watermarks/htmlcov_watermarks *
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
+recursive-exclude * .pytest_cache
+recursive-exclude * .ruff_cache
+recursive-exclude * .benchmarks
+
+# Exclude development artifacts
+prune .git
+prune .hypothesis
+prune .mypy_cache
+prune .venv
+prune venv
+prune dist
+prune build
+prune *.egg-info

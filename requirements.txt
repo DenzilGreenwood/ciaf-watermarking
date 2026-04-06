@@ -1,0 +1,27 @@
+# Core dependencies (required)
+pydantic>=2.0.0,<3.0.0
+
+# Optional: Image watermarking
+Pillow>=10.0.0
+imagehash>=4.3.0
+qrcode[pil]>=7.4.0
+
+# Optional: PDF watermarking
+pypdf>=3.0.0
+reportlab>=4.0.0
+
+# Optional: Video watermarking (requires ffmpeg binary)
+ffmpeg-python>=0.2.0
+opencv-python>=4.8.0
+
+# Optional: Audio watermarking
+librosa>=0.10.0
+soundfile>=0.12.0
+
+# Optional: GPU acceleration (requires CUDA)
+# torch>=2.0.0
+# torchvision>=0.15.0
+
+# Optional: Cloud storage
+# boto3>=1.26.0
+# azure-storage-blob>=12.14.0

@@ -1,0 +1,74 @@
+version: 2
+updates:
+  # Maintain GitHub Actions dependencies
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+
+  # Maintain Python dependencies in pyproject.toml
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "python"
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+    groups:
+      # Group core dependencies
+      core:
+        patterns:
+          - "pydantic*"
+      # Group image processing dependencies
+      image-processing:
+        patterns:
+          - "Pillow"
+          - "imagehash"
+          - "qrcode"
+      # Group PDF dependencies
+      pdf:
+        patterns:
+          - "pypdf"
+          - "reportlab"
+      # Group video/audio dependencies
+      multimedia:
+        patterns:
+          - "ffmpeg-python"
+          - "opencv-python"
+          - "librosa"
+          - "soundfile"
+      # Group cloud dependencies
+      cloud:
+        patterns:
+          - "boto3"
+          - "azure-storage-blob"
+      # Group ML dependencies
+      ml:
+        patterns:
+          - "torch"
+          - "torchvision"
+      # Group development dependencies
+      development:
+        patterns:
+          - "pytest*"
+          - "flake8"
+          - "ruff"
+          - "black"
+          - "mypy"
+    ignore:
+      # Pin major versions for stability
+      - dependency-name: "pydantic"
+        update-types: ["version-update:semver-major"]

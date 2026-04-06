@@ -1,0 +1,210 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ciaf-watermarks"
+version = "1.4.0"
+description = "Forensic provenance and watermark verification for AI-generated artifacts"
+readme = "README.md"
+license = {text = "BUSL-1.1"}
+authors = [
+    {name = "Denzil James Greenwood", email = "founder@cognitiveinsight.ai"}
+]
+maintainers = [
+    {name = "Denzil James Greenwood", email = "founder@cognitiveinsight.ai"}
+]
+keywords = [
+    "ai", "artificial intelligence", "watermarking", "forensics", 
+    "provenance", "content-authenticity", "tamper-detection",
+    "dual-state-hashing", "fragment-verification", "ciaf"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: Other/Proprietary License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Security :: Cryptography",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Multimedia :: Graphics",
+    "Topic :: Multimedia :: Video",
+    "Topic :: Multimedia :: Sound/Audio"
+]
+requires-python = ">=3.8"
+dependencies = [
+    "pydantic>=2.0.0,<3.0.0",
+]
+
+[project.optional-dependencies]
+# Image watermarking support
+images = [
+    "Pillow>=10.0.0",
+    "imagehash>=4.3.0",
+    "qrcode[pil]>=7.4.0",
+]
+
+# PDF watermarking support
+pdf = [
+    "pypdf>=3.0.0",
+    "reportlab>=4.0.0",
+]
+
+# Video watermarking support (requires ffmpeg binary installed separately)
+video = [
+    "ffmpeg-python>=0.2.0",
+    "opencv-python>=4.8.0",
+]
+
+# Audio watermarking support
+audio = [
+    "librosa>=0.10.0",
+    "soundfile>=0.12.0",
+]
+
+# GPU acceleration (requires CUDA)
+gpu = [
+    "torch>=2.0.0",
+    "torchvision>=0.15.0",
+]
+
+# Cloud storage backends
+cloud = [
+    "boto3>=1.26.0",  # AWS S3
+    "azure-storage-blob>=12.14.0",  # Azure Blob Storage
+]
+
+# Development dependencies
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "pytest-mock>=3.10.0",
+    "pytest-asyncio>=0.21.0",
+    "flake8>=6.0.0",
+    "ruff>=0.1.0",
+    "black>=23.0.0",
+    "mypy>=1.0.0",
+]
+
+# Full installation (all features)
+full = [
+    "ciaf-watermarks[images,pdf,video,audio,gpu,cloud]",
+]
+
+# Testing installation (core + dev tools, no GPU/cloud)
+test = [
+    "ciaf-watermarks[images,pdf,dev]",
+]
+
+[project.urls]
+Homepage = "https://github.com/DenzilGreenwood/ciaf-watermarking"
+Repository = "https://github.com/DenzilGreenwood/ciaf-watermarking/tree/main"
+Documentation = "https://github.com/DenzilGreenwood/ciaf-watermarking"
+"Bug Tracker" = "https://github.com/DenzilGreenwood/ciaf-watermarking/issues"
+
+[tool.setuptools]
+# Explicitly list packages to include
+packages = [
+    "ciaf_watermarks",
+    "ciaf_watermarks.text",
+    "ciaf_watermarks.images",
+    "ciaf_watermarks.pdf",
+    "ciaf_watermarks.video",
+    "ciaf_watermarks.audio",
+    "ciaf_watermarks.binary",
+    "ciaf_watermarks.gpu",
+]
+
+[tool.setuptools.package-dir]
+# Map the virtual package name to the actual directory
+"ciaf_watermarks" = "."
+"ciaf_watermarks.text" = "text"
+"ciaf_watermarks.images" = "images"
+"ciaf_watermarks.pdf" = "pdf"
+"ciaf_watermarks.video" = "video"
+"ciaf_watermarks.audio" = "audio"
+"ciaf_watermarks.binary" = "binary"
+"ciaf_watermarks.gpu" = "gpu"
+
+[tool.setuptools.package-data]
+ciaf_watermarks = [
+    "*.md",
+    "LICENSE",
+    ".flake8",
+    "ruff.toml",
+]
+
+[tool.black]
+line-length = 100
+target-version = ['py38', 'py39', 'py310', 'py311', 'py312']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.ruff]
+line-length = 100
+target-version = "py38"
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q --strict-markers"
+testpaths = [
+    "test_watermarks",
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "gpu: marks tests requiring GPU/CUDA (deselect with '-m \"not gpu\"')",
+    "integration: marks tests as integration tests",
+    "requires_ffmpeg: marks tests requiring FFmpeg binary",
+    "requires_cloud: marks tests requiring cloud credentials",
+]
+
+[tool.coverage.run]
+source = ["."]
+omit = [
+    "test_watermarks/*",
+    "*/__pycache__/*",
+    "*/tests/*",
+    "setup.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "@abstractmethod",
+]
