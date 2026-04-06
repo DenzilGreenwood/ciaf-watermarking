@@ -204,7 +204,6 @@ def set_default_watermark_config(config: Dict[str, Any]) -> None:
         ...     "image": {"opacity": 0.5, "include_qr": True}
         ... })
     """
-    global _DEFAULT_CONFIG
     _DEFAULT_CONFIG.update(config)
 
 

@@ -55,7 +55,7 @@ except ImportError:
 
 try:
     import acoustid
-    import chromaprint
+    import chromaprint  # noqa: F401
 
     CHROMAPRINT_AVAILABLE = True
 except ImportError:
@@ -63,7 +63,7 @@ except ImportError:
 
 try:
     import boto3
-    from botocore.exceptions import ClientError
+    from botocore.exceptions import ClientError  # noqa: F401
 
     BOTO3_AVAILABLE = True
 except ImportError:
@@ -449,7 +449,7 @@ def compute_video_phash(video_bytes: bytes, num_frames: int = 5) -> List[str]:
 
     try:
         import cv2
-        import numpy as np
+        import numpy as np  # noqa: F401
     except ImportError:
         raise ImportError(
             "Video pHash requires opencv-python.\n"
@@ -1020,7 +1020,7 @@ def detect_scene_changes(
     finally:
         try:
             os.unlink(tmp_path)
-        except:
+        except Exception:
             pass
 
 
@@ -1140,7 +1140,7 @@ def analyze_keyframe_transitions(
     finally:
         try:
             os.unlink(tmp_path)
-        except:
+        except Exception:
             pass
 
 
@@ -1226,7 +1226,7 @@ def track_audio_beats(
     finally:
         try:
             os.unlink(tmp_path)
-        except:
+        except Exception:
             pass
 
 

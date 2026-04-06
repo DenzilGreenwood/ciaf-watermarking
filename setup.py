@@ -21,7 +21,7 @@ Author: Denzil James Greenwood
 Version: 1.4.0
 """
 
-from setuptools import setup, find_packages
+from setuptools import setup
 from pathlib import Path
 
 # Read README for long description
@@ -39,13 +39,10 @@ if __name__ == "__main__":
         # Minimal configuration - most settings in pyproject.toml
         long_description=long_description,
         long_description_content_type="text/markdown",
-        
         # Include package data
         include_package_data=True,
-        
         # Zip safe
         zip_safe=False,
-        
         # Python version requirement
         python_requires=">=3.8",
     )

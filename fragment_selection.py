@@ -499,7 +499,7 @@ def select_video_forensic_snippets(
         # Clean up temporary file
         try:
             os.unlink(tmp_path)
-        except:
+        except Exception:
             pass
 
 
@@ -603,7 +603,7 @@ def _estimate_frame_entropy(frame: np.ndarray) -> float:
 # Optional audio processing dependencies
 try:
     import wave
-    import struct
+    import struct  # noqa: F401
 
     WAVE_AVAILABLE = True
 except ImportError:
@@ -675,7 +675,7 @@ def select_audio_forensic_segments(
                     # Read segment data
                     try:
                         audio_data = wav_file.readframes(segment_frames)
-                    except:
+                    except Exception:
                         # End of file or read error
                         break
 

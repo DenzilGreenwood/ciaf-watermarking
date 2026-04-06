@@ -176,10 +176,10 @@ def gpu_perceptual_hash_video(video_bytes: bytes, device: str = "cuda") -> str:
     # Import video processing
     try:
         import ffmpeg
-        from PIL import Image
+        from PIL import Image  # noqa: F401
         import tempfile
         import os
-        import io
+        import io  # noqa: F401
     except ImportError:
         raise ImportError("ffmpeg-python and Pillow are required.")
 

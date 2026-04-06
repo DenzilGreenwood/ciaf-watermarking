@@ -65,7 +65,6 @@ def main():
         ("ciaf_watermarks.fragment_verification", "Fragment verification"),
         ("ciaf_watermarks.hierarchical_verification", "Hierarchical verification"),
     ]
-    
     core_success = all(check_import(mod, desc) for mod, desc in core_checks)
     print()
 
@@ -81,7 +80,6 @@ def main():
         ("ciaf_watermarks.binary", "Binary watermarking"),
         ("ciaf_watermarks.gpu", "GPU acceleration"),
     ]
-    
     submodule_success = all(check_import(mod, desc) for mod, desc in submodule_checks)
     print()
 
@@ -94,10 +92,9 @@ def main():
         ("ciaf_watermarks.build_text_artifact_evidence", "build_text_artifact_evidence"),
         ("ciaf_watermarks.verify_text_artifact", "verify_text_artifact"),
     ]
-    
+
     function_success = all(check_import(func, desc) for func, desc in function_checks)
     print()
-
     # Optional dependencies
     print("Optional Dependencies:")
     print("-" * 60)
@@ -114,7 +111,7 @@ def main():
         ("soundfile", "SoundFile - Audio I/O"),
         ("torch", "PyTorch - GPU acceleration"),
     ]
-    
+
     for module, desc in optional_deps:
         check_optional_dependency(module, desc)
     print()
@@ -135,7 +132,7 @@ def main():
             print("Package is ready to use!")
         except Exception as e:
             print(f"✗ Quick test failed: {e}")
-        
+
         return 0
     else:
         print("✗ Installation verification FAILED")
