@@ -21,9 +21,9 @@ try:
 
     LIBROSA_AVAILABLE = True
 except ImportError:
-    librosa = None  # For mocking in tests
-    np = None
-    sf = None
+    librosa = None  # type: ignore
+    np = None  # type: ignore
+    sf = None  # type: ignore
     LIBROSA_AVAILABLE = False
 
 
@@ -263,7 +263,7 @@ def _embed_spectral_watermark(
     audio_watermarked = librosa.istft(D_watermarked)
 
     # Normalize to prevent clipping
-    max_val = np.max(np.abs(audio_watermarked))
+    max_val: float = float(np.max(np.abs(audio_watermarked)))
     if max_val > 1.0:
         audio_watermarked = audio_watermarked / max_val
 

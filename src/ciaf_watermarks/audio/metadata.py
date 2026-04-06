@@ -243,7 +243,7 @@ def get_audio_info(audio_bytes: bytes) -> Dict[str, Any]:
         format_info = probe.get("format", {})
 
         # Get first audio stream
-        audio_stream = next(
+        audio_stream: Dict[str, Any] = next(
             (s for s in probe.get("streams", []) if s.get("codec_type") == "audio"), {}
         )
 

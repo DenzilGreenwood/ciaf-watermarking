@@ -57,7 +57,7 @@ def compute_text_entropy(text: str) -> float:
     text = text.lower()
 
     # Count character frequencies
-    char_freq = {}
+    char_freq: Dict[str, int] = {}
     for char in text:
         char_freq[char] = char_freq.get(char, 0) + 1
 
@@ -421,7 +421,7 @@ def select_video_forensic_snippets(
                 int(total_frames * (i + 1) / (num_keyframes + 1)) for i in range(num_keyframes)
             ]
 
-        snippets = []
+        snippets: List[VideoForensicSnippet] = []
 
         for idx, frame_idx in enumerate(frame_indices):
             # Seek to frame
@@ -580,7 +580,7 @@ def _estimate_frame_entropy(frame: np.ndarray) -> float:
     hist = hist / hist.sum()  # Normalize
 
     # Calculate Shannon entropy
-    entropy = -np.sum(hist * np.log2(hist + 1e-10))
+    entropy: float = float(-np.sum(hist * np.log2(hist + 1e-10)))
 
     # Normalize to 0-1 (max entropy for 8-bit = 8.0)
     return entropy / 8.0
@@ -756,7 +756,7 @@ def _compute_basic_spectral_features(
         # Compute entropy from amplitude distribution
         hist, _ = np.histogram(samples, bins=256, range=(-1, 1))
         hist = hist / (hist.sum() + 1e-10)  # Normalize
-        entropy = -np.sum(hist * np.log2(hist + 1e-10))
+        entropy: float = float(-np.sum(hist * np.log2(hist + 1e-10)))
         entropy_normalized = entropy / 8.0  # Normalize to 0-1
 
         # Compute FFT for spectral features (simplified)

@@ -54,7 +54,7 @@ class WatermarkContext:
     model_id: str
     model_version: str
     actor_id: str
-    metadata: Dict[str, Any] = None
+    metadata: Optional[Dict[str, Any]] = None
 
     def __post_init__(self):
         """Initialize metadata dict if not provided."""
@@ -214,6 +214,8 @@ def watermark_context(
             raise ValueError(
                 "Either provide a WatermarkContext or all of " "(model_id, model_version, actor_id)"
             )
+        # Type narrowing: we've confirmed these are not None
+        assert model_id is not None and model_version is not None and actor_id is not None
         context = WatermarkContext(
             model_id=model_id, model_version=model_version, actor_id=actor_id
         )
