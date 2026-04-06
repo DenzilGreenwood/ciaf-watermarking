@@ -1,5 +1,5 @@
 """
-Tests for ciaf.watermarks.hierarchical_verification module.
+Tests for ciaf_watermarks.hierarchical_verification module.
 
 Tests cover:
 - Multi-tier verification
@@ -17,7 +17,7 @@ class TestHierarchicalVerification:
     def test_determine_verification_tier(self):
         """Test verification tier determination."""
         try:
-            from ciaf.watermarks.hierarchical_verification import (
+            from ciaf_watermarks.hierarchical_verification import (
                 determine_verification_tier,
             )
 

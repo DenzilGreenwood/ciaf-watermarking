@@ -1,5 +1,5 @@
 """
-Tests for ciaf.watermarks.fragment_verification module.
+Tests for ciaf_watermarks.fragment_verification module.
 
 Tests cover:
 - Fragment-based verification
@@ -17,7 +17,7 @@ class TestFragmentVerification:
     def test_verify_fragments(self):
         """Test fragment-based verification."""
         try:
-            from ciaf.watermarks.fragment_verification import verify_fragments
+            from ciaf_watermarks.fragment_verification import verify_fragments
 
             suspect_fragments = ["fragment1", "fragment2"]
             evidence_fragments = ["fragment1", "fragment2"]

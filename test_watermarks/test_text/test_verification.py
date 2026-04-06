@@ -1,5 +1,5 @@
 """
-Tests for ciaf.watermarks.text.verification module.
+Tests for ciaf_watermarks.text.verification module.
 
 Tests cover:
 - Text verification against evidence
@@ -11,11 +11,11 @@ Tests cover:
 """
 
 import pytest
-from ciaf.watermarks.text.verification import (
+from ciaf_watermarks.text.verification import (
     verify_text_artifact,
 )
-from ciaf.watermarks.text.core import build_text_artifact_evidence
-from ciaf.watermarks.text.watermark import remove_watermark, apply_text_watermark
+from ciaf_watermarks.text.core import build_text_artifact_evidence
+from ciaf_watermarks.text.watermark import remove_watermark, apply_text_watermark
 
 
 @pytest.mark.unit
@@ -86,19 +86,14 @@ class TestTextWatermarkRemovalDetection:
         result = verify_text_artifact(tampered, evidence)
 
         # Should detect different watermark
-        assert any(
-            "different" in note.lower() or "tamper" in note.lower()
-            for note in result.notes
-        )
+        assert any("different" in note.lower() or "tamper" in note.lower() for note in result.notes)
 
 
 @pytest.mark.unit
 class TestTextNormalizedHashMatching:
     """Test normalized hash matching."""
 
-    def test_normalized_match_with_whitespace_changes(
-        self, sample_text, common_watermark_params
-    ):
+    def test_normalized_match_with_whitespace_changes(self, sample_text, common_watermark_params):
         """Test normalized matching ignores whitespace changes."""
         evidence, watermarked = build_text_artifact_evidence(
             raw_text=sample_text, **common_watermark_params
@@ -177,9 +172,7 @@ class TestTextSimHashSimilarity:
 class TestTextVerificationNoMatch:
     """Test verification with no match."""
 
-    def test_verify_completely_different_text(
-        self, sample_text, common_watermark_params
-    ):
+    def test_verify_completely_different_text(self, sample_text, common_watermark_params):
         """Test verification with completely unrelated text."""
         evidence, watermarked = build_text_artifact_evidence(
             raw_text=sample_text, **common_watermark_params
@@ -251,10 +244,7 @@ class TestTextVerificationMultiTier:
 
         result = verify_text_artifact(modified, evidence, check_simhash=True)
 
-        if (
-            result.perceptual_similarity_score
-            and result.perceptual_similarity_score > 0.7
-        ):
+        if result.perceptual_similarity_score and result.perceptual_similarity_score > 0.7:
             assert result.confidence > 0.7
 
 
@@ -264,7 +254,7 @@ class TestTextVerificationErrorHandling:
 
     def test_verify_wrong_artifact_type(self, sample_text, common_watermark_params):
         """Test verification raises error for wrong artifact type."""
-        from ciaf.watermarks.models import (
+        from ciaf_watermarks.models import (
             ArtifactEvidence,
             ArtifactType,
             WatermarkDescriptor,

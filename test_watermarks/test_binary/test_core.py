@@ -1,5 +1,5 @@
 """
-Tests for ciaf.watermarks.binary.core module.
+Tests for ciaf_watermarks.binary.core module.
 
 Tests cover:
 - Binary artifact evidence building
@@ -9,13 +9,13 @@ Tests cover:
 """
 
 import pytest
-from ciaf.watermarks.binary import (
+from ciaf_watermarks.binary import (
     build_binary_artifact_evidence,
     get_binary_info,
     has_binary_watermark,
 )
-from ciaf.watermarks.binary.metadata import remove_binary_watermark
-from ciaf.watermarks.models import ArtifactType, WatermarkType
+from ciaf_watermarks.binary.metadata import remove_binary_watermark
+from ciaf_watermarks.models import ArtifactType, WatermarkType
 
 
 @pytest.mark.unit
@@ -37,9 +37,7 @@ class TestBinaryArtifactEvidenceBuilding:
         assert len(watermarked) > len(sample_binary_bytes)
         assert isinstance(watermarked, bytes)
 
-    def test_build_evidence_preserves_original(
-        self, sample_binary_bytes, common_watermark_params
-    ):
+    def test_build_evidence_preserves_original(self, sample_binary_bytes, common_watermark_params):
         """Test that evidence building preserves original binary."""
         evidence, watermarked = build_binary_artifact_evidence(
             binary_bytes=sample_binary_bytes, **common_watermark_params
@@ -128,9 +126,7 @@ class TestBinaryInfoExtraction:
 class TestBinaryMetadataHandling:
     """Test binary metadata handling."""
 
-    def test_evidence_contains_binary_metadata(
-        self, sample_binary_bytes, common_watermark_params
-    ):
+    def test_evidence_contains_binary_metadata(self, sample_binary_bytes, common_watermark_params):
         """Test that evidence contains binary-specific metadata."""
         evidence, watermarked = build_binary_artifact_evidence(
             binary_bytes=sample_binary_bytes, **common_watermark_params
@@ -151,7 +147,7 @@ class TestBinaryMetadataHandling:
         """Test that evidence includes file type detection."""
         elf_binary = b"\x7fELF" + b"\x00" * 100
 
-        from ciaf.watermarks.binary import build_binary_artifact_evidence
+        from ciaf_watermarks.binary import build_binary_artifact_evidence
 
         evidence, watermarked = build_binary_artifact_evidence(
             binary_bytes=elf_binary,
@@ -194,23 +190,15 @@ class TestBinaryHashComputation:
         )
 
         # Should be lowercase hex
-        assert all(
-            c in "0123456789abcdef"
-            for c in evidence.hashes.content_hash_before_watermark
-        )
-        assert all(
-            c in "0123456789abcdef"
-            for c in evidence.hashes.content_hash_after_watermark
-        )
+        assert all(c in "0123456789abcdef" for c in evidence.hashes.content_hash_before_watermark)
+        assert all(c in "0123456789abcdef" for c in evidence.hashes.content_hash_after_watermark)
 
 
 @pytest.mark.unit
 class TestBinaryWatermarkIntegrity:
     """Test binary watermark integrity."""
 
-    def test_watermark_has_magic_bytes(
-        self, sample_binary_bytes, common_watermark_params
-    ):
+    def test_watermark_has_magic_bytes(self, sample_binary_bytes, common_watermark_params):
         """Test that watermark contains CIAF magic bytes."""
 
         evidence, watermarked = build_binary_artifact_evidence(

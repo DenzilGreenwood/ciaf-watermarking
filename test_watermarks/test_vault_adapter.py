@@ -1,5 +1,5 @@
 """
-Tests for ciaf.watermarks.vault_adapter module.
+Tests for ciaf_watermarks.vault_adapter module.
 
 Tests cover:
 - Vault client integration
@@ -19,8 +19,8 @@ class TestVaultAdapter:
     def test_store_evidence_in_vault(self, sample_text, common_watermark_params):
         """Test storing evidence in vault."""
         try:
-            from ciaf.watermarks.vault_adapter import VaultAdapter
-            from ciaf.watermarks.text import build_text_artifact_evidence
+            from ciaf_watermarks.vault_adapter import VaultAdapter
+            from ciaf_watermarks.text import build_text_artifact_evidence
 
             evidence, watermarked = build_text_artifact_evidence(
                 raw_text=sample_text, **common_watermark_params
@@ -40,7 +40,7 @@ class TestVaultAdapter:
     def test_retrieve_evidence_from_vault(self):
         """Test retrieving evidence from vault."""
         try:
-            from ciaf.watermarks.vault_adapter import VaultAdapter
+            from ciaf_watermarks.vault_adapter import VaultAdapter
 
             vault = VaultAdapter(vault_url="https://test.vault.com")
 

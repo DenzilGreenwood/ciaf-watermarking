@@ -1,5 +1,5 @@
 """
-Tests for ciaf.watermarks.video.verification module.
+Tests for ciaf_watermarks.video.verification module.
 
 Tests cover:
 - Video verification against evidence
@@ -20,17 +20,15 @@ class TestVideoVerification:
         pytest.importorskip("ffmpeg")
 
         try:
-            from ciaf.watermarks.video import (
+            from ciaf_watermarks.video import (
                 build_video_artifact_evidence,
                 verify_video_artifact,
             )
 
-            with patch(
-                "ciaf.watermarks.video.core.apply_video_metadata_watermark"
-            ) as mock_apply:
+            with patch("ciaf_watermarks.video.core.apply_video_metadata_watermark") as mock_apply:
                 mock_apply.return_value = sample_video_bytes + b"watermark"
 
-                with patch("ciaf.watermarks.video.core.get_video_info") as mock_info:
+                with patch("ciaf_watermarks.video.core.get_video_info") as mock_info:
                     mock_info.return_value = {
                         "duration": 10.0,
                         "width": 1920,

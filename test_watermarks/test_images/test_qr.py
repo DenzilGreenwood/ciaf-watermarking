@@ -1,5 +1,5 @@
 """
-Tests for ciaf.watermarks.images.qr module.
+Tests for ciaf_watermarks.images.qr module.
 
 Tests cover:
 - QR code watermark generation
@@ -22,7 +22,7 @@ class TestQRCodeGeneration:
     def test_generate_qr_code(self):
         """Test generating QR code from data."""
         try:
-            from ciaf.watermarks.images import generate_qr_code
+            from ciaf_watermarks.images import generate_qr_code
 
             qr_bytes = generate_qr_code("https://test.com/verify/wmk-123")
 
@@ -38,7 +38,7 @@ class TestQRCodeGeneration:
     def test_generate_qr_code_different_sizes(self):
         """Test generating QR codes with different sizes."""
         try:
-            from ciaf.watermarks.images import generate_qr_code
+            from ciaf_watermarks.images import generate_qr_code
 
             for size in [100, 200, 300]:
                 qr_bytes = generate_qr_code(data="https://test.com", size=size)
@@ -52,7 +52,7 @@ class TestQRCodeGeneration:
     def test_generate_qr_code_error_correction(self):
         """Test QR code generation with different error correction levels."""
         try:
-            from ciaf.watermarks.images import generate_qr_code
+            from ciaf_watermarks.images import generate_qr_code
 
             for error_correction in ["L", "M", "Q", "H"]:
                 qr_bytes = generate_qr_code(
@@ -61,9 +61,7 @@ class TestQRCodeGeneration:
 
                 assert isinstance(qr_bytes, bytes)
         except (ImportError, TypeError):
-            pytest.skip(
-                "qrcode not available or error_correction parameter not supported"
-            )
+            pytest.skip("qrcode not available or error_correction parameter not supported")
 
 
 @pytest.mark.unit
@@ -74,7 +72,7 @@ class TestQRCodeEmbedding:
     def test_embed_qr_code_in_image(self, sample_image_bytes):
         """Test embedding QR code in image."""
         try:
-            from ciaf.watermarks.images import embed_qr_code_in_image
+            from ciaf_watermarks.images import embed_qr_code_in_image
 
             watermarked = embed_qr_code_in_image(
                 image_bytes=sample_image_bytes,
@@ -91,7 +89,7 @@ class TestQRCodeEmbedding:
     def test_embed_qr_code_different_positions(self, sample_image_bytes):
         """Test QR code embedding at different positions."""
         try:
-            from ciaf.watermarks.images import embed_qr_code_in_image
+            from ciaf_watermarks.images import embed_qr_code_in_image
 
             positions = ["top-left", "top-right", "bottom-left", "bottom-right"]
 
@@ -109,7 +107,7 @@ class TestQRCodeEmbedding:
     def test_embed_qr_code_with_scaling(self, sample_image_bytes):
         """Test QR code embedding with different scales."""
         try:
-            from ciaf.watermarks.images import embed_qr_code_in_image
+            from ciaf_watermarks.images import embed_qr_code_in_image
 
             for scale in [0.1, 0.15, 0.2]:
                 watermarked = embed_qr_code_in_image(
@@ -120,9 +118,7 @@ class TestQRCodeEmbedding:
 
                 assert isinstance(watermarked, bytes)
         except (ImportError, AttributeError, TypeError):
-            pytest.skip(
-                "embed_qr_code_in_image not implemented or scale parameter not supported"
-            )
+            pytest.skip("embed_qr_code_in_image not implemented or scale parameter not supported")
 
 
 @pytest.mark.unit
@@ -133,7 +129,7 @@ class TestQRCodeExtraction:
     def test_extract_qr_code_from_image(self):
         """Test extracting QR code data from image."""
         try:
-            from ciaf.watermarks.images import (
+            from ciaf_watermarks.images import (
                 extract_qr_code_from_image,
                 generate_qr_code,
             )
@@ -146,14 +142,12 @@ class TestQRCodeExtraction:
 
             assert extracted_data == "https://test.com/verify/wmk-123"
         except (ImportError, AttributeError):
-            pytest.skip(
-                "QR code extraction not implemented or dependencies not available"
-            )
+            pytest.skip("QR code extraction not implemented or dependencies not available")
 
     def test_extract_from_image_without_qr(self, sample_image_bytes):
         """Test extracting QR code from image without QR code."""
         try:
-            from ciaf.watermarks.images import extract_qr_code_from_image
+            from ciaf_watermarks.images import extract_qr_code_from_image
 
             extracted_data = extract_qr_code_from_image(sample_image_bytes)
 
@@ -167,12 +161,10 @@ class TestQRCodeExtraction:
 class TestQRCodeWatermarkIntegration:
     """Test QR code watermark integration with evidence system."""
 
-    def test_qr_code_contains_verification_url(
-        self, sample_image_bytes, test_watermark_id
-    ):
+    def test_qr_code_contains_verification_url(self, sample_image_bytes, test_watermark_id):
         """Test that QR code contains verification URL."""
         try:
-            from ciaf.watermarks.images import embed_qr_code_in_image
+            from ciaf_watermarks.images import embed_qr_code_in_image
 
             verification_url = f"https://test.com/verify/{test_watermark_id}"
 
@@ -189,7 +181,7 @@ class TestQRCodeWatermarkIntegration:
     def test_qr_code_preserves_image_quality(self, sample_image_bytes):
         """Test that QR code embedding preserves image quality."""
         try:
-            from ciaf.watermarks.images import embed_qr_code_in_image
+            from ciaf_watermarks.images import embed_qr_code_in_image
 
             watermarked = embed_qr_code_in_image(
                 image_bytes=sample_image_bytes, qr_data="https://test.com"
@@ -211,7 +203,7 @@ class TestQRCodeErrorHandling:
     def test_generate_qr_code_empty_data(self):
         """Test QR code generation with empty data."""
         try:
-            from ciaf.watermarks.images import generate_qr_code
+            from ciaf_watermarks.images import generate_qr_code
 
             with pytest.raises(ValueError):
                 generate_qr_code("")
@@ -221,7 +213,7 @@ class TestQRCodeErrorHandling:
     def test_generate_qr_code_invalid_error_correction(self):
         """Test QR code generation with invalid error correction level."""
         try:
-            from ciaf.watermarks.images import generate_qr_code
+            from ciaf_watermarks.images import generate_qr_code
 
             with pytest.raises(ValueError):
                 generate_qr_code("test", error_correction="X")

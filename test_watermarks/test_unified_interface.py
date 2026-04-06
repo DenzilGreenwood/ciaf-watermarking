@@ -1,5 +1,5 @@
 """
-Tests for ciaf.watermarks.unified_interface module.
+Tests for ciaf_watermarks.unified_interface module.
 
 Tests cover:
 - Unified watermarking interface
@@ -15,12 +15,10 @@ import pytest
 class TestUnifiedWatermarkingInterface:
     """Test unified watermarking interface."""
 
-    def test_watermark_text_via_unified_interface(
-        self, sample_text, common_watermark_params
-    ):
+    def test_watermark_text_via_unified_interface(self, sample_text, common_watermark_params):
         """Test watermarking text via unified interface."""
         try:
-            from ciaf.watermarks import watermark_artifact
+            from ciaf_watermarks import watermark_artifact
 
             evidence, watermarked = watermark_artifact(
                 content=sample_text, artifact_type="text", **common_watermark_params
@@ -34,7 +32,7 @@ class TestUnifiedWatermarkingInterface:
     def test_watermark_auto_detect_type(self, sample_text, common_watermark_params):
         """Test artifact type auto-detection."""
         try:
-            from ciaf.watermarks import watermark_artifact
+            from ciaf_watermarks import watermark_artifact
 
             evidence, watermarked = watermark_artifact(
                 content=sample_text, **common_watermark_params
@@ -47,7 +45,7 @@ class TestUnifiedWatermarkingInterface:
     def test_verify_via_unified_interface(self, sample_text, common_watermark_params):
         """Test verification via unified interface."""
         try:
-            from ciaf.watermarks import watermark_artifact, verify_artifact
+            from ciaf_watermarks import watermark_artifact, verify_artifact
 
             evidence, watermarked = watermark_artifact(
                 content=sample_text, artifact_type="text", **common_watermark_params

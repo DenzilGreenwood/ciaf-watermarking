@@ -1,5 +1,5 @@
 """
-Tests for ciaf.watermarks.advanced_features module.
+Tests for ciaf_watermarks.advanced_features module.
 
 Tests cover:
 - Advanced watermarking features

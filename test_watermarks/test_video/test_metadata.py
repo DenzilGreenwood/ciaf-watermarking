@@ -1,5 +1,5 @@
 """
-Tests for ciaf.watermarks.video.metadata module.
+Tests for ciaf_watermarks.video.metadata module.
 
 Tests cover:
 - Video metadata watermarking
@@ -15,16 +15,14 @@ from unittest.mock import MagicMock, patch
 class TestVideoMetadataWatermarking:
     """Test video metadata watermarking."""
 
-    def test_apply_video_metadata_watermark(
-        self, sample_video_bytes, test_watermark_id
-    ):
+    def test_apply_video_metadata_watermark(self, sample_video_bytes, test_watermark_id):
         """Test applying metadata watermark to video."""
         pytest.importorskip("ffmpeg")
 
         try:
-            from ciaf.watermarks.video import apply_video_metadata_watermark
+            from ciaf_watermarks.video import apply_video_metadata_watermark
 
-            with patch("ciaf.watermarks.video.metadata.ffmpeg") as mock_ffmpeg:
+            with patch("ciaf_watermarks.video.metadata.ffmpeg") as mock_ffmpeg:
                 mock_ffmpeg.input.return_value = MagicMock()
                 mock_ffmpeg.output.return_value = MagicMock()
 
@@ -50,9 +48,9 @@ class TestVideoMetadataWatermarking:
         pytest.importorskip("ffmpeg")
 
         try:
-            from ciaf.watermarks.video import extract_video_metadata_watermark
+            from ciaf_watermarks.video import extract_video_metadata_watermark
 
-            with patch("ciaf.watermarks.video.metadata.ffmpeg") as mock_ffmpeg:
+            with patch("ciaf_watermarks.video.metadata.ffmpeg") as mock_ffmpeg:
                 mock_ffmpeg.probe.return_value = {
                     "format": {"tags": {"comment": "CIAF Watermark: wmk-123"}}
                 }

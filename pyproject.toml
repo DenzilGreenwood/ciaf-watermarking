@@ -110,28 +110,14 @@ Documentation = "https://github.com/DenzilGreenwood/ciaf-watermarking"
 "Bug Tracker" = "https://github.com/DenzilGreenwood/ciaf-watermarking/issues"
 
 [tool.setuptools]
-# Explicitly list packages to include
-packages = [
-    "ciaf_watermarks",
-    "ciaf_watermarks.text",
-    "ciaf_watermarks.images",
-    "ciaf_watermarks.pdf",
-    "ciaf_watermarks.video",
-    "ciaf_watermarks.audio",
-    "ciaf_watermarks.binary",
-    "ciaf_watermarks.gpu",
-]
-
-[tool.setuptools.package-dir]
-# Map the virtual package name to the actual directory
-"ciaf_watermarks" = "."
-"ciaf_watermarks.text" = "text"
-"ciaf_watermarks.images" = "images"
-"ciaf_watermarks.pdf" = "pdf"
-"ciaf_watermarks.video" = "video"
-"ciaf_watermarks.audio" = "audio"
-"ciaf_watermarks.binary" = "binary"
-"ciaf_watermarks.gpu" = "gpu"
+# Auto-discover packages in src/ directory
+# setuptools will automatically find all packages under src/ciaf_watermarks/
+package-dir = {"" = "src"}
+# Enable automatic package discovery
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["ciaf_watermarks*"]
+exclude = ["test*"]
 
 [tool.setuptools.package-data]
 ciaf_watermarks = [
@@ -177,9 +163,25 @@ warn_no_return = true
 
 [tool.pytest.ini_options]
 minversion = "7.0"
-addopts = "-ra -q --strict-markers"
+addopts = "-ra -q --strict-markers --import-mode=importlib"
 testpaths = [
     "test_watermarks",
+]
+# Only collect test files, not package __init__.py files
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+# Exclude directories from test collection
+norecursedirs = [
+    ".git",
+    ".tox", 
+    "dist",
+    "build",
+    "*.egg",
+    "*.egg-info",
+    "__pycache__",
+    ".pytest_cache",
+    "htmlcov*",
 ]
 markers = [
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",

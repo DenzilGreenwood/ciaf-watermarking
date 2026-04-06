@@ -1,5 +1,5 @@
 """
-Tests for ciaf.watermarks.fragment_selection module.
+Tests for ciaf_watermarks.fragment_selection module.
 
 Tests cover:
 - Fragment extraction
@@ -17,7 +17,7 @@ class TestFragmentSelection:
     def test_select_text_fragments(self, sample_text):
         """Test selecting text fragments."""
         try:
-            from ciaf.watermarks.fragment_selection import select_text_fragments
+            from ciaf_watermarks.fragment_selection import select_text_fragments
 
             fragments = select_text_fragments(sample_text, num_fragments=5)
 
@@ -29,7 +29,7 @@ class TestFragmentSelection:
     def test_select_image_fragments(self, sample_image_bytes):
         """Test selecting image fragments."""
         try:
-            from ciaf.watermarks.fragment_selection import select_image_fragments
+            from ciaf_watermarks.fragment_selection import select_image_fragments
 
             fragments = select_image_fragments(sample_image_bytes, num_fragments=5)
 

@@ -1,5 +1,5 @@
 """
-Tests for ciaf.watermarks.binary module.
+Tests for ciaf_watermarks.binary module.
 
 Tests cover:
 - Binary metadata block watermarking
@@ -9,12 +9,12 @@ Tests cover:
 """
 
 import pytest
-from ciaf.watermarks.binary import (
+from ciaf_watermarks.binary import (
     apply_binary_metadata_watermark,
     extract_binary_metadata_watermark,
     has_binary_watermark,
 )
-from ciaf.watermarks.binary.metadata import remove_binary_watermark
+from ciaf_watermarks.binary.metadata import remove_binary_watermark
 
 
 @pytest.mark.unit

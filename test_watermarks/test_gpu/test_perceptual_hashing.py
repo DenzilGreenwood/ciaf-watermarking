@@ -1,5 +1,5 @@
 """
-Tests for ciaf.watermarks.gpu module.
+Tests for ciaf_watermarks.gpu module.
 
 Tests cover:
 - GPU perceptual hashing
@@ -20,7 +20,7 @@ class TestGPUPerceptualHashing:
 
     def test_cuda_availability_check(self):
         """Test CUDA availability detection."""
-        from ciaf.watermarks.gpu import CUDA_AVAILABLE, TORCH_AVAILABLE
+        from ciaf_watermarks.gpu import CUDA_AVAILABLE, TORCH_AVAILABLE
 
         assert isinstance(CUDA_AVAILABLE, bool)
         assert isinstance(TORCH_AVAILABLE, bool)
@@ -34,11 +34,9 @@ class TestGPUPerceptualHashing:
     def test_gpu_perceptual_hash_cpu_mode(self, sample_image_bytes):
         """Test GPU perceptual hashing in CPU mode."""
         try:
-            from ciaf.watermarks.gpu import gpu_perceptual_hash_image
+            from ciaf_watermarks.gpu import gpu_perceptual_hash_image
 
-            hash_value = gpu_perceptual_hash_image(
-                image_bytes=sample_image_bytes, device="cpu"
-            )
+            hash_value = gpu_perceptual_hash_image(image_bytes=sample_image_bytes, device="cpu")
 
             assert isinstance(hash_value, str)
             assert len(hash_value) == 16  # 16 hex characters
@@ -47,22 +45,18 @@ class TestGPUPerceptualHashing:
             pytest.skip("torch or PIL not available")
 
     @pytest.mark.skipif(
-        not pytest.importorskip(
-            "torch", reason="torch not available"
-        ).cuda.is_available(),
+        not pytest.importorskip("torch", reason="torch not available").cuda.is_available(),
         reason="CUDA not available",
     )
     def test_gpu_perceptual_hash_cuda_mode(self, sample_image_bytes):
         """Test GPU perceptual hashing in CUDA mode."""
         try:
-            from ciaf.watermarks.gpu import gpu_perceptual_hash_image, CUDA_AVAILABLE
+            from ciaf_watermarks.gpu import gpu_perceptual_hash_image, CUDA_AVAILABLE
 
             if not CUDA_AVAILABLE:
                 pytest.skip("CUDA not available")
 
-            hash_value = gpu_perceptual_hash_image(
-                image_bytes=sample_image_bytes, device="cuda"
-            )
+            hash_value = gpu_perceptual_hash_image(image_bytes=sample_image_bytes, device="cuda")
 
             assert isinstance(hash_value, str)
             assert len(hash_value) == 16
@@ -72,14 +66,10 @@ class TestGPUPerceptualHashing:
     def test_hash_consistency_cpu(self, sample_image_bytes):
         """Test that CPU hash is consistent."""
         try:
-            from ciaf.watermarks.gpu import gpu_perceptual_hash_image
+            from ciaf_watermarks.gpu import gpu_perceptual_hash_image
 
-            hash1 = gpu_perceptual_hash_image(
-                image_bytes=sample_image_bytes, device="cpu"
-            )
-            hash2 = gpu_perceptual_hash_image(
-                image_bytes=sample_image_bytes, device="cpu"
-            )
+            hash1 = gpu_perceptual_hash_image(image_bytes=sample_image_bytes, device="cpu")
+            hash2 = gpu_perceptual_hash_image(image_bytes=sample_image_bytes, device="cpu")
 
             assert hash1 == hash2
         except ImportError:
@@ -95,7 +85,7 @@ class TestGPUBatchProcessing:
     def test_batch_hash_images_cpu(self, sample_image_bytes):
         """Test batch hashing on CPU."""
         try:
-            from ciaf.watermarks.gpu import batch_perceptual_hash_images
+            from ciaf_watermarks.gpu import batch_perceptual_hash_images
 
             # Create multiple image variants
             image_list = [sample_image_bytes] * 5
@@ -110,24 +100,20 @@ class TestGPUBatchProcessing:
             pytest.skip("torch or PIL not available")
 
     @pytest.mark.skipif(
-        not pytest.importorskip(
-            "torch", reason="torch not available"
-        ).cuda.is_available(),
+        not pytest.importorskip("torch", reason="torch not available").cuda.is_available(),
         reason="CUDA not available",
     )
     def test_batch_hash_images_cuda(self, sample_image_bytes):
         """Test batch hashing on CUDA."""
         try:
-            from ciaf.watermarks.gpu import batch_perceptual_hash_images, CUDA_AVAILABLE
+            from ciaf_watermarks.gpu import batch_perceptual_hash_images, CUDA_AVAILABLE
 
             if not CUDA_AVAILABLE:
                 pytest.skip("CUDA not available")
 
             image_list = [sample_image_bytes] * 10
 
-            hashes = batch_perceptual_hash_images(
-                images_bytes=image_list, device="cuda"
-            )
+            hashes = batch_perceptual_hash_images(images_bytes=image_list, device="cuda")
 
             assert len(hashes) == 10
             assert all(isinstance(h, str) for h in hashes)
@@ -143,7 +129,7 @@ class TestGPUFragmentSelection:
     def test_gpu_fragment_selector_init(self):
         """Test GPUFragmentSelector initialization."""
         try:
-            from ciaf.watermarks.gpu import GPUFragmentSelector
+            from ciaf_watermarks.gpu import GPUFragmentSelector
 
             selector = GPUFragmentSelector(device="cpu")
             assert selector is not None
@@ -155,7 +141,7 @@ class TestGPUFragmentSelection:
     def test_select_image_fragments_cpu(self, sample_image_bytes):
         """Test fragment selection on CPU."""
         try:
-            from ciaf.watermarks.gpu import GPUFragmentSelector
+            from ciaf_watermarks.gpu import GPUFragmentSelector
 
             selector = GPUFragmentSelector(device="cpu")
             fragments = selector.select_image_fragments(
@@ -177,7 +163,7 @@ class TestGPUPerformance:
     def test_cpu_vs_gpu_performance_comparison(self, sample_image_bytes):
         """Compare CPU vs GPU performance (when CUDA available)."""
         try:
-            from ciaf.watermarks.gpu import gpu_perceptual_hash_image, CUDA_AVAILABLE
+            from ciaf_watermarks.gpu import gpu_perceptual_hash_image, CUDA_AVAILABLE
             import time
 
             # Test CPU performance

@@ -1,5 +1,5 @@
 """
-Tests for ciaf.watermarks.images.steganography module.
+Tests for ciaf_watermarks.images.steganography module.
 
 Tests cover:
 - LSB (Least Significant Bit) steganography
@@ -22,13 +22,11 @@ class TestLSBSteganography:
     def test_embed_data_lsb(self, sample_image_bytes):
         """Test embedding data using LSB steganography."""
         try:
-            from ciaf.watermarks.images import embed_data_lsb
+            from ciaf_watermarks.images import embed_data_lsb
 
             secret_data = "watermark-id:wmk-test-123"
 
-            watermarked = embed_data_lsb(
-                image_bytes=sample_image_bytes, data=secret_data
-            )
+            watermarked = embed_data_lsb(image_bytes=sample_image_bytes, data=secret_data)
 
             assert isinstance(watermarked, bytes)
             img = Image.open(io.BytesIO(watermarked))
@@ -39,13 +37,11 @@ class TestLSBSteganography:
     def test_extract_data_lsb(self, sample_image_bytes):
         """Test extracting data using LSB steganography."""
         try:
-            from ciaf.watermarks.images import embed_data_lsb, extract_data_lsb
+            from ciaf_watermarks.images import embed_data_lsb, extract_data_lsb
 
             secret_data = "wmk-extract-test"
 
-            watermarked = embed_data_lsb(
-                image_bytes=sample_image_bytes, data=secret_data
-            )
+            watermarked = embed_data_lsb(image_bytes=sample_image_bytes, data=secret_data)
 
             extracted = extract_data_lsb(watermarked)
 
@@ -56,11 +52,9 @@ class TestLSBSteganography:
     def test_lsb_preserves_image_appearance(self, sample_image_bytes):
         """Test that LSB embedding preserves image appearance."""
         try:
-            from ciaf.watermarks.images import embed_data_lsb
+            from ciaf_watermarks.images import embed_data_lsb
 
-            watermarked = embed_data_lsb(
-                image_bytes=sample_image_bytes, data="test data"
-            )
+            watermarked = embed_data_lsb(image_bytes=sample_image_bytes, data="test data")
 
             # Images should have same dimensions
             original_img = Image.open(io.BytesIO(sample_image_bytes))
@@ -80,7 +74,7 @@ class TestSteganographicCapacity:
     def test_calculate_capacity(self, sample_image_bytes):
         """Test calculating steganographic capacity."""
         try:
-            from ciaf.watermarks.images import calculate_steganographic_capacity
+            from ciaf_watermarks.images import calculate_steganographic_capacity
 
             capacity = calculate_steganographic_capacity(sample_image_bytes)
 
@@ -92,7 +86,7 @@ class TestSteganographicCapacity:
     def test_data_fits_in_capacity(self, sample_image_bytes):
         """Test that data fits within image capacity."""
         try:
-            from ciaf.watermarks.images import (
+            from ciaf_watermarks.images import (
                 calculate_steganographic_capacity,
                 embed_data_lsb,
             )
@@ -102,9 +96,7 @@ class TestSteganographicCapacity:
             # Data should fit
             short_data = "x" * min(100, capacity // 8 - 10)
 
-            watermarked = embed_data_lsb(
-                image_bytes=sample_image_bytes, data=short_data
-            )
+            watermarked = embed_data_lsb(image_bytes=sample_image_bytes, data=short_data)
 
             assert isinstance(watermarked, bytes)
         except (ImportError, AttributeError):
@@ -113,7 +105,7 @@ class TestSteganographicCapacity:
     def test_data_exceeds_capacity_raises_error(self, sample_image_bytes):
         """Test that exceeding capacity raises error."""
         try:
-            from ciaf.watermarks.images import (
+            from ciaf_watermarks.images import (
                 embed_data_lsb,
                 calculate_steganographic_capacity,
             )
@@ -137,11 +129,9 @@ class TestSteganographicWatermarking:
     def test_embed_watermark_id(self, sample_image_bytes, test_watermark_id):
         """Test embedding watermark ID steganographically."""
         try:
-            from ciaf.watermarks.images import embed_data_lsb, extract_data_lsb
+            from ciaf_watermarks.images import embed_data_lsb, extract_data_lsb
 
-            watermarked = embed_data_lsb(
-                image_bytes=sample_image_bytes, data=test_watermark_id
-            )
+            watermarked = embed_data_lsb(image_bytes=sample_image_bytes, data=test_watermark_id)
 
             extracted = extract_data_lsb(watermarked)
 
@@ -152,7 +142,7 @@ class TestSteganographicWatermarking:
     def test_embed_metadata_json(self, sample_image_bytes):
         """Test embedding JSON metadata steganographically."""
         try:
-            from ciaf.watermarks.images import embed_data_lsb, extract_data_lsb
+            from ciaf_watermarks.images import embed_data_lsb, extract_data_lsb
             import json
 
             metadata = {
@@ -163,9 +153,7 @@ class TestSteganographicWatermarking:
 
             metadata_str = json.dumps(metadata)
 
-            watermarked = embed_data_lsb(
-                image_bytes=sample_image_bytes, data=metadata_str
-            )
+            watermarked = embed_data_lsb(image_bytes=sample_image_bytes, data=metadata_str)
 
             extracted = extract_data_lsb(watermarked)
             extracted_metadata = json.loads(extracted)
@@ -183,7 +171,7 @@ class TestSteganographyRobustness:
     def test_survives_lossless_save(self, sample_image_bytes):
         """Test that steganographic watermark survives lossless save."""
         try:
-            from ciaf.watermarks.images import embed_data_lsb, extract_data_lsb
+            from ciaf_watermarks.images import embed_data_lsb, extract_data_lsb
 
             secret = "test-robust"
 
@@ -204,7 +192,7 @@ class TestSteganographyRobustness:
     def test_lossy_compression_may_destroy(self, sample_image_bytes):
         """Test that lossy compression may destroy steganographic watermark."""
         try:
-            from ciaf.watermarks.images import embed_data_lsb, extract_data_lsb
+            from ciaf_watermarks.images import embed_data_lsb, extract_data_lsb
 
             secret = "test-compression"
 
@@ -236,7 +224,7 @@ class TestAdvancedSteganography:
     def test_multi_channel_embedding(self, sample_image_bytes):
         """Test embedding data across multiple color channels."""
         try:
-            from ciaf.watermarks.images import embed_data_lsb
+            from ciaf_watermarks.images import embed_data_lsb
 
             watermarked = embed_data_lsb(
                 image_bytes=sample_image_bytes,
@@ -251,12 +239,10 @@ class TestAdvancedSteganography:
     def test_variable_bit_depth(self, sample_image_bytes):
         """Test embedding with variable bit depth."""
         try:
-            from ciaf.watermarks.images import embed_data_lsb
+            from ciaf_watermarks.images import embed_data_lsb
 
             # Use 2 LSBs instead of 1
-            watermarked = embed_data_lsb(
-                image_bytes=sample_image_bytes, data="test", bit_depth=2
-            )
+            watermarked = embed_data_lsb(image_bytes=sample_image_bytes, data="test", bit_depth=2)
 
             assert isinstance(watermarked, bytes)
         except (ImportError, AttributeError, TypeError):

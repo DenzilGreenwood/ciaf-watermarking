@@ -1,5 +1,5 @@
 """
-Tests for ciaf.watermarks.audio.core module.
+Tests for ciaf_watermarks.audio.core module.
 
 Tests cover:
 - Audio artifact evidence building
@@ -16,19 +16,15 @@ from unittest.mock import patch
 class TestAudioArtifactEvidenceBuilding:
     """Test audio artifact evidence building."""
 
-    def test_build_evidence_metadata_mode(
-        self, sample_audio_bytes, common_watermark_params
-    ):
+    def test_build_evidence_metadata_mode(self, sample_audio_bytes, common_watermark_params):
         """Test building audio evidence with metadata mode."""
-        from ciaf.watermarks.audio import build_audio_artifact_evidence
-        from ciaf.watermarks.models import ArtifactType, WatermarkType
+        from ciaf_watermarks.audio import build_audio_artifact_evidence
+        from ciaf_watermarks.models import ArtifactType, WatermarkType
 
-        with patch(
-            "ciaf.watermarks.audio.core.apply_audio_metadata_watermark"
-        ) as mock_apply:
+        with patch("ciaf_watermarks.audio.core.apply_audio_metadata_watermark") as mock_apply:
             mock_apply.return_value = sample_audio_bytes + b"watermark"
 
-            with patch("ciaf.watermarks.audio.core.get_audio_info") as mock_info:
+            with patch("ciaf_watermarks.audio.core.get_audio_info") as mock_info:
                 mock_info.return_value = {
                     "duration": 5.0,
                     "sample_rate": 44100,
@@ -51,29 +47,23 @@ class TestAudioArtifactEvidenceBuilding:
                 assert evidence.metadata["watermark_mode"] == "metadata"
                 assert isinstance(watermarked, bytes)
 
-    def test_build_evidence_spectral_mode(
-        self, sample_audio_bytes, common_watermark_params
-    ):
+    def test_build_evidence_spectral_mode(self, sample_audio_bytes, common_watermark_params):
         """Test building audio evidence with spectral mode."""
-        from ciaf.watermarks.audio import (
+        from ciaf_watermarks.audio import (
             build_audio_artifact_evidence,
             AudioWatermarkSpec,
         )
-        from ciaf.watermarks.models import WatermarkType
+        from ciaf_watermarks.models import WatermarkType
 
         spec = AudioWatermarkSpec(strength=0.1)  # noqa: F841
 
-        with patch(
-            "ciaf.watermarks.audio.core.apply_audio_metadata_watermark"
-        ) as mock_meta:
+        with patch("ciaf_watermarks.audio.core.apply_audio_metadata_watermark") as mock_meta:
             mock_meta.return_value = sample_audio_bytes + b"meta"
 
-            with patch(
-                "ciaf.watermarks.audio.core.apply_audio_spectral_watermark"
-            ) as mock_apply:
+            with patch("ciaf_watermarks.audio.core.apply_audio_spectral_watermark") as mock_apply:
                 mock_apply.return_value = sample_audio_bytes + b"spectral"
 
-                with patch("ciaf.watermarks.audio.core.get_audio_info") as mock_info:
+                with patch("ciaf_watermarks.audio.core.get_audio_info") as mock_info:
                     mock_info.return_value = {
                         "duration": 5.0,
                         "sample_rate": 44100,
@@ -92,24 +82,20 @@ class TestAudioArtifactEvidenceBuilding:
 
                 assert evidence.watermark.watermark_type == WatermarkType.EMBEDDED
         """Test building audio evidence with dual (metadata + spectral) mode."""
-        from ciaf.watermarks.audio import (
+        from ciaf_watermarks.audio import (
             build_audio_artifact_evidence,
             AudioWatermarkSpec,
         )
 
         _spec = AudioWatermarkSpec(strength=0.1)  # noqa: F841
 
-        with patch(
-            "ciaf.watermarks.audio.core.apply_audio_metadata_watermark"
-        ) as mock_meta:
+        with patch("ciaf_watermarks.audio.core.apply_audio_metadata_watermark") as mock_meta:
             mock_meta.return_value = sample_audio_bytes + b"meta"
 
-            with patch(
-                "ciaf.watermarks.audio.core.apply_audio_spectral_watermark"
-            ) as mock_spec:
+            with patch("ciaf_watermarks.audio.core.apply_audio_spectral_watermark") as mock_spec:
                 mock_spec.return_value = sample_audio_bytes + b"spectral"
 
-                with patch("ciaf.watermarks.audio.core.get_audio_info") as mock_info:
+                with patch("ciaf_watermarks.audio.core.get_audio_info") as mock_info:
                     mock_info.return_value = {
                         "duration": 5.0,
                         "sample_rate": 44100,
@@ -135,11 +121,11 @@ class TestAudioInfoExtraction:
 
     def test_get_audio_info_mock(self, sample_audio_bytes):
         """Test getting audio info with mocked ffmpeg."""
-        from ciaf.watermarks.audio import get_audio_info
+        from ciaf_watermarks.audio import get_audio_info
 
         pytest.importorskip("ffmpeg")
 
-        with patch("ciaf.watermarks.audio.metadata.ffmpeg") as mock_ffmpeg:
+        with patch("ciaf_watermarks.audio.metadata.ffmpeg") as mock_ffmpeg:
             mock_ffmpeg.probe.return_value = {
                 "format": {
                     "format_name": "mp3",
@@ -167,11 +153,11 @@ class TestAudioInfoExtraction:
 
     def test_get_audio_info_invalid_audio(self):
         """Test get audio info with invalid audio data."""
-        from ciaf.watermarks.audio import get_audio_info
+        from ciaf_watermarks.audio import get_audio_info
 
         invalid_bytes = b"not valid audio data"
 
-        with patch("ciaf.watermarks.audio.metadata.ffmpeg") as mock_ffmpeg:
+        with patch("ciaf_watermarks.audio.metadata.ffmpeg") as mock_ffmpeg:
             mock_ffmpeg.probe.side_effect = Exception("Invalid audio")
 
             with patch("builtins.open", create=True):
@@ -183,18 +169,14 @@ class TestAudioInfoExtraction:
 class TestAudioMetadataHandling:
     """Test audio metadata handling."""
 
-    def test_evidence_contains_audio_metadata(
-        self, sample_audio_bytes, common_watermark_params
-    ):
+    def test_evidence_contains_audio_metadata(self, sample_audio_bytes, common_watermark_params):
         """Test that evidence contains audio-specific metadata."""
-        from ciaf.watermarks.audio import build_audio_artifact_evidence
+        from ciaf_watermarks.audio import build_audio_artifact_evidence
 
-        with patch(
-            "ciaf.watermarks.audio.core.apply_audio_metadata_watermark"
-        ) as mock_apply:
+        with patch("ciaf_watermarks.audio.core.apply_audio_metadata_watermark") as mock_apply:
             mock_apply.return_value = sample_audio_bytes
 
-            with patch("ciaf.watermarks.audio.core.get_audio_info") as mock_info:
+            with patch("ciaf_watermarks.audio.core.get_audio_info") as mock_info:
                 mock_info.return_value = {
                     "duration": 10.5,
                     "sample_rate": 48000,
@@ -218,11 +200,9 @@ class TestAudioMetadataHandling:
                 assert evidence.metadata["codec"] == "aac"
                 assert evidence.metadata["bitrate"] == 256000
 
-    def test_evidence_with_additional_metadata(
-        self, sample_audio_bytes, common_watermark_params
-    ):
+    def test_evidence_with_additional_metadata(self, sample_audio_bytes, common_watermark_params):
         """Test evidence with additional custom metadata."""
-        from ciaf.watermarks.audio import build_audio_artifact_evidence
+        from ciaf_watermarks.audio import build_audio_artifact_evidence
 
         additional = {
             "voice_model": "voice-clone-v2",
@@ -230,12 +210,10 @@ class TestAudioMetadataHandling:
             "speaker_id": "speaker-123",
         }
 
-        with patch(
-            "ciaf.watermarks.audio.core.apply_audio_metadata_watermark"
-        ) as mock_apply:
+        with patch("ciaf_watermarks.audio.core.apply_audio_metadata_watermark") as mock_apply:
             mock_apply.return_value = sample_audio_bytes
 
-            with patch("ciaf.watermarks.audio.core.get_audio_info") as mock_info:
+            with patch("ciaf_watermarks.audio.core.get_audio_info") as mock_info:
                 mock_info.return_value = {
                     "duration": 5.0,
                     "sample_rate": 44100,
@@ -264,14 +242,12 @@ class TestAudioHashComputation:
 
     def test_audio_hashes_computed(self, sample_audio_bytes, common_watermark_params):
         """Test that audio hashes are properly computed."""
-        from ciaf.watermarks.audio import build_audio_artifact_evidence
+        from ciaf_watermarks.audio import build_audio_artifact_evidence
 
-        with patch(
-            "ciaf.watermarks.audio.core.apply_audio_metadata_watermark"
-        ) as mock_apply:
+        with patch("ciaf_watermarks.audio.core.apply_audio_metadata_watermark") as mock_apply:
             mock_apply.return_value = sample_audio_bytes + b"watermark"
 
-            with patch("ciaf.watermarks.audio.core.get_audio_info") as mock_info:
+            with patch("ciaf_watermarks.audio.core.get_audio_info") as mock_info:
                 mock_info.return_value = {
                     "duration": 5.0,
                     "sample_rate": 44100,

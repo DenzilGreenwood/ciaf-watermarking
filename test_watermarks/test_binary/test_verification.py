@@ -1,5 +1,5 @@
 """
-Tests for ciaf.watermarks.binary.verification module.
+Tests for ciaf_watermarks.binary.verification module.
 
 Tests cover:
 - Binary verification against evidence
@@ -9,11 +9,11 @@ Tests cover:
 """
 
 import pytest
-from ciaf.watermarks.binary import (
+from ciaf_watermarks.binary import (
     build_binary_artifact_evidence,
     verify_binary_artifact,
 )
-from ciaf.watermarks.binary.metadata import remove_binary_watermark
+from ciaf_watermarks.binary.metadata import remove_binary_watermark
 
 
 @pytest.mark.unit
@@ -32,9 +32,7 @@ class TestBinaryVerificationExactMatch:
         assert result.confidence == 1.0
         assert result.exact_match_after_watermark is True
 
-    def test_verify_exact_match_original(
-        self, sample_binary_bytes, common_watermark_params
-    ):
+    def test_verify_exact_match_original(self, sample_binary_bytes, common_watermark_params):
         """Test verification matches original (pre-watermark)."""
         evidence, watermarked = build_binary_artifact_evidence(
             binary_bytes=sample_binary_bytes, **common_watermark_params
@@ -52,9 +50,7 @@ class TestBinaryVerificationExactMatch:
 class TestBinaryWatermarkRemovalDetection:
     """Test watermark removal detection."""
 
-    def test_detect_watermark_removal(
-        self, sample_binary_bytes, common_watermark_params
-    ):
+    def test_detect_watermark_removal(self, sample_binary_bytes, common_watermark_params):
         """Test detection of watermark removal."""
         evidence, watermarked = build_binary_artifact_evidence(
             binary_bytes=sample_binary_bytes, **common_watermark_params
@@ -68,9 +64,7 @@ class TestBinaryWatermarkRemovalDetection:
         assert result.likely_tag_removed is True
         assert result.confidence == 0.99
 
-    def test_detect_partial_modification(
-        self, sample_binary_bytes, common_watermark_params
-    ):
+    def test_detect_partial_modification(self, sample_binary_bytes, common_watermark_params):
         """Test detection of partial binary modification."""
         evidence, watermarked = build_binary_artifact_evidence(
             binary_bytes=sample_binary_bytes, **common_watermark_params
@@ -89,9 +83,7 @@ class TestBinaryWatermarkRemovalDetection:
 class TestBinaryVerificationNoMatch:
     """Test verification with no match."""
 
-    def test_verify_completely_different_binary(
-        self, sample_binary_bytes, common_watermark_params
-    ):
+    def test_verify_completely_different_binary(self, sample_binary_bytes, common_watermark_params):
         """Test verification with completely different binary."""
         evidence, watermarked = build_binary_artifact_evidence(
             binary_bytes=sample_binary_bytes, **common_watermark_params
@@ -149,11 +141,9 @@ class TestBinaryVerificationMultiTier:
 class TestBinaryWatermarkMetadataVerification:
     """Test binary watermark metadata verification."""
 
-    def test_verify_watermark_metadata(
-        self, sample_binary_bytes, common_watermark_params
-    ):
+    def test_verify_watermark_metadata(self, sample_binary_bytes, common_watermark_params):
         """Test that watermark metadata can be verified."""
-        from ciaf.watermarks.binary import extract_binary_metadata_watermark
+        from ciaf_watermarks.binary import extract_binary_metadata_watermark
 
         evidence, watermarked = build_binary_artifact_evidence(
             binary_bytes=sample_binary_bytes, **common_watermark_params
@@ -166,11 +156,9 @@ class TestBinaryWatermarkMetadataVerification:
         assert metadata["watermark_id"] == evidence.watermark.watermark_id
         assert metadata["model_id"] == common_watermark_params["model_id"]
 
-    def test_verify_metadata_integrity(
-        self, sample_binary_bytes, common_watermark_params
-    ):
+    def test_verify_metadata_integrity(self, sample_binary_bytes, common_watermark_params):
         """Test that metadata integrity is preserved."""
-        from ciaf.watermarks.binary import extract_binary_metadata_watermark
+        from ciaf_watermarks.binary import extract_binary_metadata_watermark
 
         evidence, watermarked = build_binary_artifact_evidence(
             binary_bytes=sample_binary_bytes,
@@ -189,7 +177,7 @@ class TestBinaryVerificationErrorHandling:
 
     def test_verify_wrong_artifact_type(self, sample_binary_bytes):
         """Test verification raises error for wrong artifact type."""
-        from ciaf.watermarks.models import (
+        from ciaf_watermarks.models import (
             ArtifactEvidence,
             ArtifactType,
             WatermarkDescriptor,
@@ -242,9 +230,7 @@ class TestBinaryVerificationNotes:
         assert len(result.notes) > 0
         assert any("Exact match" in note for note in result.notes)
 
-    def test_watermark_removal_notes(
-        self, sample_binary_bytes, common_watermark_params
-    ):
+    def test_watermark_removal_notes(self, sample_binary_bytes, common_watermark_params):
         """Test that watermark removal produces appropriate notes."""
         evidence, watermarked = build_binary_artifact_evidence(
             binary_bytes=sample_binary_bytes, **common_watermark_params

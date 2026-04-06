@@ -1,5 +1,5 @@
 """
-Tests for ciaf.watermarks.images.visual module.
+Tests for ciaf_watermarks.images.visual module.
 
 Tests cover:
 - Visual watermark application
@@ -22,7 +22,7 @@ class TestVisualWatermarkApplication:
     def test_apply_text_watermark(self, sample_image_bytes):
         """Test applying text watermark to image."""
         try:
-            from ciaf.watermarks.images import apply_visual_text_watermark
+            from ciaf_watermarks.images import apply_visual_text_watermark
 
             watermarked = apply_visual_text_watermark(
                 image_bytes=sample_image_bytes,
@@ -43,7 +43,7 @@ class TestVisualWatermarkApplication:
     def test_apply_text_watermark_different_positions(self, sample_image_bytes):
         """Test text watermark at different positions."""
         try:
-            from ciaf.watermarks.images import apply_visual_text_watermark
+            from ciaf_watermarks.images import apply_visual_text_watermark
 
             positions = [
                 "top-left",
@@ -69,7 +69,7 @@ class TestVisualWatermarkApplication:
     def test_apply_text_watermark_opacity(self, sample_image_bytes):
         """Test text watermark with different opacity levels."""
         try:
-            from ciaf.watermarks.images import apply_visual_text_watermark
+            from ciaf_watermarks.images import apply_visual_text_watermark
 
             for opacity in [0.3, 0.5, 0.7, 1.0]:
                 watermarked = apply_visual_text_watermark(
@@ -85,7 +85,7 @@ class TestVisualWatermarkApplication:
     def test_invalid_opacity_raises_error(self, sample_image_bytes):
         """Test that invalid opacity raises error."""
         try:
-            from ciaf.watermarks.images import apply_visual_text_watermark
+            from ciaf_watermarks.images import apply_visual_text_watermark
 
             with pytest.raises(ValueError, match="opacity"):
                 apply_visual_text_watermark(
@@ -99,7 +99,7 @@ class TestVisualWatermarkApplication:
     def test_invalid_position_raises_error(self, sample_image_bytes):
         """Test that invalid position raises error."""
         try:
-            from ciaf.watermarks.images import apply_visual_text_watermark
+            from ciaf_watermarks.images import apply_visual_text_watermark
 
             with pytest.raises(ValueError, match="position"):
                 apply_visual_text_watermark(
@@ -119,7 +119,7 @@ class TestLogoWatermarking:
     def test_apply_logo_watermark(self, sample_image_bytes):
         """Test applying logo watermark."""
         try:
-            from ciaf.watermarks.images import apply_logo_watermark
+            from ciaf_watermarks.images import apply_logo_watermark
 
             # Use sample image as logo
             watermarked = apply_logo_watermark(
@@ -138,7 +138,7 @@ class TestLogoWatermarking:
     def test_apply_logo_watermark_scaling(self, sample_image_bytes):
         """Test logo watermark with different scales."""
         try:
-            from ciaf.watermarks.images import apply_logo_watermark
+            from ciaf_watermarks.images import apply_logo_watermark
 
             for scale in [0.1, 0.2, 0.3]:
                 watermarked = apply_logo_watermark(
@@ -160,7 +160,7 @@ class TestVisualWatermarkCustomization:
     def test_custom_font_size(self, sample_image_bytes):
         """Test text watermark with custom font size."""
         try:
-            from ciaf.watermarks.images import apply_visual_text_watermark
+            from ciaf_watermarks.images import apply_visual_text_watermark
 
             watermarked = apply_visual_text_watermark(
                 image_bytes=sample_image_bytes, watermark_text="Test", font_size=36
@@ -173,7 +173,7 @@ class TestVisualWatermarkCustomization:
     def test_custom_color(self, sample_image_bytes):
         """Test text watermark with custom color."""
         try:
-            from ciaf.watermarks.images import apply_visual_text_watermark
+            from ciaf_watermarks.images import apply_visual_text_watermark
 
             watermarked = apply_visual_text_watermark(
                 image_bytes=sample_image_bytes,
@@ -194,7 +194,7 @@ class TestVisualWatermarkPreservation:
     def test_preserves_image_dimensions(self, sample_image_bytes):
         """Test that watermarking preserves image dimensions."""
         try:
-            from ciaf.watermarks.images import apply_visual_text_watermark
+            from ciaf_watermarks.images import apply_visual_text_watermark
 
             # Get original dimensions
             original_img = Image.open(io.BytesIO(sample_image_bytes))
@@ -214,7 +214,7 @@ class TestVisualWatermarkPreservation:
     def test_preserves_image_format(self, sample_image_bytes):
         """Test that watermarking can preserve image format."""
         try:
-            from ciaf.watermarks.images import apply_visual_text_watermark
+            from ciaf_watermarks.images import apply_visual_text_watermark
 
             watermarked = apply_visual_text_watermark(
                 image_bytes=sample_image_bytes, watermark_text="Test"

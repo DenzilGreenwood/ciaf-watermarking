@@ -1,5 +1,5 @@
 """
-Tests for ciaf.watermarks.models module.
+Tests for ciaf_watermarks.models module.
 
 Tests cover:
 - Data model creation and validation
@@ -11,7 +11,7 @@ Tests cover:
 import pytest
 from datetime import datetime
 
-from ciaf.watermarks.models import (
+from ciaf_watermarks.models import (
     ArtifactType,
     WatermarkType,
     ArtifactEvidence,

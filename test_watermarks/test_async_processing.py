@@ -1,5 +1,5 @@
 """
-Tests for ciaf.watermarks.async_processing module.
+Tests for ciaf_watermarks.async_processing module.
 
 Tests cover:
 - Async watermarking
@@ -19,7 +19,7 @@ class TestAsyncWatermarking:
     async def test_watermark_async(self, sample_text, common_watermark_params):
         """Test async watermarking."""
         try:
-            from ciaf.watermarks.async_processing import watermark_async
+            from ciaf_watermarks.async_processing import watermark_async
 
             evidence, watermarked = await watermark_async(
                 content=sample_text, artifact_type="text", **common_watermark_params
@@ -33,7 +33,7 @@ class TestAsyncWatermarking:
     async def test_batch_watermark_async(self, sample_text, common_watermark_params):
         """Test batch async watermarking."""
         try:
-            from ciaf.watermarks.async_processing import batch_watermark_async
+            from ciaf_watermarks.async_processing import batch_watermark_async
 
             contents = [sample_text] * 5
 

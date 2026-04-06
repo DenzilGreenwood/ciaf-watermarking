@@ -1,5 +1,5 @@
 """
-Tests for ciaf.watermarks.pdf.metadata module.
+Tests for ciaf_watermarks.pdf.metadata module.
 
 Tests cover:
 - PDF metadata watermarking
@@ -18,7 +18,7 @@ class TestPDFMetadataWatermarking:
     def test_apply_pdf_metadata_watermark(self, sample_pdf_bytes, test_watermark_id):
         """Test applying metadata watermark to PDF."""
         try:
-            from ciaf.watermarks.pdf import apply_pdf_metadata_watermark
+            from ciaf_watermarks.pdf import apply_pdf_metadata_watermark
 
             watermarked = apply_pdf_metadata_watermark(
                 pdf_bytes=sample_pdf_bytes,
@@ -37,7 +37,7 @@ class TestPDFMetadataWatermarking:
     def test_extract_pdf_metadata(self, sample_pdf_bytes):
         """Test extracting metadata from PDF."""
         try:
-            from ciaf.watermarks.pdf import extract_pdf_metadata_watermark
+            from ciaf_watermarks.pdf import extract_pdf_metadata_watermark
 
             metadata = extract_pdf_metadata_watermark(sample_pdf_bytes)
 
@@ -49,7 +49,7 @@ class TestPDFMetadataWatermarking:
     def test_has_pdf_watermark(self, sample_pdf_bytes):
         """Test checking if PDF has watermark."""
         try:
-            from ciaf.watermarks.pdf import has_pdf_watermark
+            from ciaf_watermarks.pdf import has_pdf_watermark
 
             result = has_pdf_watermark(sample_pdf_bytes)
 
@@ -65,7 +65,7 @@ class TestPDFXMPMetadata:
     def test_add_xmp_metadata(self, sample_pdf_bytes):
         """Test adding XMP metadata to PDF."""
         try:
-            from ciaf.watermarks.pdf import add_xmp_watermark
+            from ciaf_watermarks.pdf import add_xmp_watermark
 
             watermarked = add_xmp_watermark(
                 pdf_bytes=sample_pdf_bytes, watermark_data={"watermark_id": "wmk-123"}
@@ -93,7 +93,7 @@ class TestPDFCustomProperties:
     def test_add_custom_properties(self, sample_pdf_bytes):
         """Test adding custom properties to PDF."""
         try:
-            from ciaf.watermarks.pdf import apply_pdf_metadata_watermark
+            from ciaf_watermarks.pdf import apply_pdf_metadata_watermark
 
             watermarked = apply_pdf_metadata_watermark(
                 pdf_bytes=sample_pdf_bytes,

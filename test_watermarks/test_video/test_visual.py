@@ -1,5 +1,5 @@
 """
-Tests for ciaf.watermarks.video.visual module.
+Tests for ciaf_watermarks.video.visual module.
 
 Tests cover:
 - Visual watermarks on video frames
@@ -21,9 +21,9 @@ class TestVideoVisualWatermarking:
         pytest.importorskip("ffmpeg")
 
         try:
-            from ciaf.watermarks.video import apply_video_visual_watermark
+            from ciaf_watermarks.video import apply_video_visual_watermark
 
-            with patch("ciaf.watermarks.video.visual.ffmpeg") as mock_ffmpeg:
+            with patch("ciaf_watermarks.video.visual.ffmpeg") as mock_ffmpeg:
                 mock_ffmpeg.input.return_value = MagicMock()
                 mock_ffmpeg.output.return_value = MagicMock()
 

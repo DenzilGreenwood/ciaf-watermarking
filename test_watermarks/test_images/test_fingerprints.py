@@ -1,5 +1,5 @@
 """
-Tests for ciaf.watermarks.images.fingerprints module.
+Tests for ciaf_watermarks.images.fingerprints module.
 
 Tests cover:
 - Perceptual hashing (pHash, dHash, aHash)
@@ -19,7 +19,7 @@ class TestPerceptualHashing:
     def test_phash_computation(self, sample_image_bytes):
         """Test perceptual hash (pHash) computation."""
         try:
-            from ciaf.watermarks.images import compute_perceptual_hash
+            from ciaf_watermarks.images import compute_perceptual_hash
 
             phash = compute_perceptual_hash(sample_image_bytes)
 
@@ -32,7 +32,7 @@ class TestPerceptualHashing:
     def test_dhash_computation_with_size(self, sample_image_bytes):
         """Test hash computation with different hash size."""
         try:
-            from ciaf.watermarks.images import compute_perceptual_hash
+            from ciaf_watermarks.images import compute_perceptual_hash
 
             # Test with different hash size
             dhash = compute_perceptual_hash(sample_image_bytes, hash_size=16)
@@ -45,7 +45,7 @@ class TestPerceptualHashing:
     def test_ahash_computation_default(self, sample_image_bytes):
         """Test hash computation with default parameters."""
         try:
-            from ciaf.watermarks.images import compute_perceptual_hash
+            from ciaf_watermarks.images import compute_perceptual_hash
 
             ahash = compute_perceptual_hash(sample_image_bytes, hash_size=8)
 
@@ -57,7 +57,7 @@ class TestPerceptualHashing:
     def test_hash_consistency(self, sample_image_bytes):
         """Test that hash is consistent for same image."""
         try:
-            from ciaf.watermarks.images import compute_perceptual_hash
+            from ciaf_watermarks.images import compute_perceptual_hash
 
             hash1 = compute_perceptual_hash(sample_image_bytes)
             hash2 = compute_perceptual_hash(sample_image_bytes)
@@ -69,7 +69,7 @@ class TestPerceptualHashing:
     def test_invalid_hash_size_type(self, sample_image_bytes):
         """Test that invalid hash_size type is handled."""
         try:
-            from ciaf.watermarks.images import compute_perceptual_hash
+            from ciaf_watermarks.images import compute_perceptual_hash
 
             # Test with valid hash_size
             hash_value = compute_perceptual_hash(sample_image_bytes, hash_size=8)
@@ -86,8 +86,8 @@ class TestImageFingerprinting:
     def test_generate_image_fingerprints(self, sample_image_bytes):
         """Test generating multiple fingerprints for an image."""
         try:
-            from ciaf.watermarks.images import generate_image_fingerprints
-            from ciaf.watermarks.models import ArtifactFingerprint
+            from ciaf_watermarks.images import generate_image_fingerprints
+            from ciaf_watermarks.models import ArtifactFingerprint
 
             fingerprints = generate_image_fingerprints(sample_image_bytes)
 
@@ -104,7 +104,7 @@ class TestImageFingerprinting:
     def test_fingerprints_are_different(self, sample_image_bytes):
         """Test that different algorithms produce different hashes."""
         try:
-            from ciaf.watermarks.images import generate_image_fingerprints
+            from ciaf_watermarks.images import generate_image_fingerprints
 
             fingerprints = generate_image_fingerprints(sample_image_bytes)
 
@@ -125,7 +125,7 @@ class TestImageSimilarityDetection:
     def test_compare_identical_images(self, sample_image_bytes):
         """Test comparing identical images."""
         try:
-            from ciaf.watermarks.images import compare_image_hashes
+            from ciaf_watermarks.images import compare_image_hashes
 
             hash1 = "a1b2c3d4e5f60708"
             hash2 = "a1b2c3d4e5f60708"
@@ -139,7 +139,7 @@ class TestImageSimilarityDetection:
     def test_compare_different_images(self):
         """Test comparing different images."""
         try:
-            from ciaf.watermarks.images import compare_image_hashes
+            from ciaf_watermarks.images import compare_image_hashes
 
             hash1 = "0000000000000000"
             hash2 = "ffffffffffffffff"
@@ -153,12 +153,10 @@ class TestImageSimilarityDetection:
     def test_compute_similarity_score(self, sample_image_bytes):
         """Test computing similarity score."""
         try:
-            from ciaf.watermarks.images import compute_image_similarity
+            from ciaf_watermarks.images import compute_image_similarity
 
             # Compare image to itself
-            similarity = compute_image_similarity(
-                sample_image_bytes, sample_image_bytes
-            )
+            similarity = compute_image_similarity(sample_image_bytes, sample_image_bytes)
 
             assert 0.0 <= similarity <= 1.0
             assert similarity >= 0.95  # Should be very similar
@@ -174,7 +172,7 @@ class TestHashRobustness:
     def test_hash_resilient_to_minor_changes(self, sample_image_bytes):
         """Test that hash is resilient to minor image modifications."""
         try:
-            from ciaf.watermarks.images import compute_perceptual_hash
+            from ciaf_watermarks.images import compute_perceptual_hash
             from PIL import Image
             import io
 

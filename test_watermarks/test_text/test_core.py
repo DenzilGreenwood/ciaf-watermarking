@@ -1,5 +1,5 @@
 """
-Tests for ciaf.watermarks.text.core module.
+Tests for ciaf_watermarks.text.core module.
 
 Tests cover:
 - Text artifact evidence building
@@ -9,11 +9,11 @@ Tests cover:
 """
 
 import pytest
-from ciaf.watermarks.text.core import (
+from ciaf_watermarks.text.core import (
     build_text_artifact_evidence,
 )
-from ciaf.watermarks.models import ArtifactType, WatermarkType
-from ciaf.watermarks.text import has_watermark
+from ciaf_watermarks.models import ArtifactType, WatermarkType
+from ciaf_watermarks.text import has_watermark
 
 
 @pytest.mark.unit
@@ -54,9 +54,7 @@ class TestTextArtifactEvidenceBuilding:
 
         # Check fingerprints
         assert len(evidence.fingerprints) >= 2
-        simhash_fingerprints = [
-            f for f in evidence.fingerprints if f.algorithm == "simhash"
-        ]
+        simhash_fingerprints = [f for f in evidence.fingerprints if f.algorithm == "simhash"]
         assert len(simhash_fingerprints) >= 2
 
     def test_build_evidence_without_simhash(self, sample_text, common_watermark_params):
@@ -99,9 +97,7 @@ class TestTextArtifactEvidenceBuilding:
         # Check for inline style marker (may vary by implementation)
         assert watermarked != sample_text  # Should be modified
 
-    def test_build_evidence_additional_metadata(
-        self, sample_text, common_watermark_params
-    ):
+    def test_build_evidence_additional_metadata(self, sample_text, common_watermark_params):
         """Test evidence building with additional metadata."""
         additional = {"temperature": 0.7, "max_tokens": 1000, "custom_field": "value"}
 
@@ -148,29 +144,19 @@ class TestTextHashComputation:
         # SHA256 hashes should be 64 hex characters
         assert len(evidence.hashes.content_hash_before_watermark) == 64
         assert len(evidence.hashes.content_hash_after_watermark) == 64
-        assert all(
-            c in "0123456789abcdef"
-            for c in evidence.hashes.content_hash_before_watermark
-        )
+        assert all(c in "0123456789abcdef" for c in evidence.hashes.content_hash_before_watermark)
 
     def test_normalized_hash_stability(self, common_watermark_params):
         """Test that normalized hashes are stable for similar text."""
         text1 = "Hello World!"
         text2 = "Hello  World!"  # Extra space
 
-        evidence1, _ = build_text_artifact_evidence(
-            raw_text=text1, **common_watermark_params
-        )
+        evidence1, _ = build_text_artifact_evidence(raw_text=text1, **common_watermark_params)
 
-        evidence2, _ = build_text_artifact_evidence(
-            raw_text=text2, **common_watermark_params
-        )
+        evidence2, _ = build_text_artifact_evidence(raw_text=text2, **common_watermark_params)
 
         # Normalized hashes should be identical (ignoring whitespace)
-        assert (
-            evidence1.hashes.normalized_hash_before
-            == evidence2.hashes.normalized_hash_before
-        )
+        assert evidence1.hashes.normalized_hash_before == evidence2.hashes.normalized_hash_before
 
 
 @pytest.mark.unit

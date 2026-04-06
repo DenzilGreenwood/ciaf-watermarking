@@ -233,7 +233,7 @@ Examples:
     if args.coverage:
         cmd.extend(
             [
-                "--cov=ciaf.watermarks",
+                "--cov=ciaf_watermarks",
                 "--cov-report=html:htmlcov_watermarks",
                 "--cov-report=term",
             ]

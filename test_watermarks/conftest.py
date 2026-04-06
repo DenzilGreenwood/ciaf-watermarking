@@ -213,12 +213,8 @@ def pytest_configure(config):
     config.addinivalue_line("markers", "gpu: marks tests requiring GPU/CUDA")
     config.addinivalue_line("markers", "integration: marks tests as integration tests")
     config.addinivalue_line("markers", "unit: marks tests as unit tests")
-    config.addinivalue_line(
-        "markers", "requires_ffmpeg: marks tests requiring ffmpeg binary"
-    )
-    config.addinivalue_line(
-        "markers", "requires_librosa: marks tests requiring librosa"
-    )
+    config.addinivalue_line("markers", "requires_ffmpeg: marks tests requiring ffmpeg binary")
+    config.addinivalue_line("markers", "requires_librosa: marks tests requiring librosa")
     config.addinivalue_line("markers", "requires_pil: marks tests requiring Pillow")
 
 
@@ -250,9 +246,7 @@ def assert_watermark_present():
     """Helper to assert watermark is present in content."""
 
     def _assert(content: str, watermark_id: str):
-        assert (
-            watermark_id in content
-        ), f"Watermark ID {watermark_id} not found in content"
+        assert watermark_id in content, f"Watermark ID {watermark_id} not found in content"
         assert "CIAF" in content or "AI Provenance" in content
 
     return _assert

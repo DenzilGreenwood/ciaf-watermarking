@@ -1,5 +1,5 @@
 """
-Tests for ciaf.watermarks.hashing module.
+Tests for ciaf_watermarks.hashing module.
 
 Tests cover:
 - SHA256 hashing
@@ -9,7 +9,7 @@ Tests cover:
 """
 
 import pytest
-from ciaf.watermarks.hashing import (
+from ciaf_watermarks.hashing import (
     sha256_bytes,
     sha256_text,
     normalized_text_hash,

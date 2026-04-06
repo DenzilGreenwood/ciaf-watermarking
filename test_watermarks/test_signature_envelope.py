@@ -1,5 +1,5 @@
 """
-Tests for ciaf.watermarks.signature_envelope module.
+Tests for ciaf_watermarks.signature_envelope module.
 
 Tests cover:
 - Digital signature generation
@@ -18,8 +18,8 @@ class TestSignatureEnvelope:
     def test_create_signature_envelope(self, sample_text, common_watermark_params):
         """Test creating signature envelope."""
         try:
-            from ciaf.watermarks.signature_envelope import create_signature_envelope
-            from ciaf.watermarks.text import build_text_artifact_evidence
+            from ciaf_watermarks.signature_envelope import create_signature_envelope
+            from ciaf_watermarks.text import build_text_artifact_evidence
 
             evidence, watermarked = build_text_artifact_evidence(
                 raw_text=sample_text, **common_watermark_params

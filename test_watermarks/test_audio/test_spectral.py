@@ -1,5 +1,5 @@
 """
-Tests for ciaf.watermarks.audio.spectral module.
+Tests for ciaf_watermarks.audio.spectral module.
 
 Tests cover:
 - Spectral watermarking
@@ -20,11 +20,9 @@ class TestAudioWatermarkSpec:
 
     def test_spec_creation_basic(self):
         """Test basic AudioWatermarkSpec creation."""
-        from ciaf.watermarks.audio import AudioWatermarkSpec
+        from ciaf_watermarks.audio import AudioWatermarkSpec
 
-        spec = AudioWatermarkSpec(
-            strength=0.1, frequency_band="high", carrier_freq=18000
-        )
+        spec = AudioWatermarkSpec(strength=0.1, frequency_band="high", carrier_freq=18000)
 
         assert spec.strength == 0.1
         assert spec.frequency_band == "high"
@@ -32,7 +30,7 @@ class TestAudioWatermarkSpec:
 
     def test_spec_creation_with_spread_spectrum(self):
         """Test spec creation with spread spectrum enabled."""
-        from ciaf.watermarks.audio import AudioWatermarkSpec
+        from ciaf_watermarks.audio import AudioWatermarkSpec
 
         spec = AudioWatermarkSpec(
             strength=0.15,
@@ -45,28 +43,28 @@ class TestAudioWatermarkSpec:
 
     def test_spec_validation_strength_too_high(self):
         """Test validation rejects strength > 1.0."""
-        from ciaf.watermarks.audio import AudioWatermarkSpec
+        from ciaf_watermarks.audio import AudioWatermarkSpec
 
         with pytest.raises(ValueError, match="strength"):
             AudioWatermarkSpec(strength=1.5)
 
     def test_spec_validation_strength_negative(self):
         """Test validation rejects negative strength."""
-        from ciaf.watermarks.audio import AudioWatermarkSpec
+        from ciaf_watermarks.audio import AudioWatermarkSpec
 
         with pytest.raises(ValueError, match="strength"):
             AudioWatermarkSpec(strength=-0.1)
 
     def test_spec_validation_invalid_frequency_band(self):
         """Test validation rejects invalid frequency band."""
-        from ciaf.watermarks.audio import AudioWatermarkSpec
+        from ciaf_watermarks.audio import AudioWatermarkSpec
 
         with pytest.raises(ValueError, match="frequency_band"):
             AudioWatermarkSpec(frequency_band="invalid")
 
     def test_spec_validation_carrier_freq_too_high(self):
         """Test validation rejects carrier frequency above Nyquist."""
-        from ciaf.watermarks.audio import AudioWatermarkSpec
+        from ciaf_watermarks.audio import AudioWatermarkSpec
 
         # Assuming 44.1kHz sample rate, Nyquist is 22.05kHz
         with pytest.raises(ValueError, match="carrier_freq"):
@@ -74,14 +72,14 @@ class TestAudioWatermarkSpec:
 
     def test_spec_validation_carrier_freq_too_low(self):
         """Test validation rejects carrier frequency too low."""
-        from ciaf.watermarks.audio import AudioWatermarkSpec
+        from ciaf_watermarks.audio import AudioWatermarkSpec
 
         with pytest.raises(ValueError, match="carrier_freq"):
             AudioWatermarkSpec(carrier_freq=100)  # Too low
 
     def test_spec_default_values(self):
         """Test AudioWatermarkSpec default values."""
-        from ciaf.watermarks.audio import AudioWatermarkSpec
+        from ciaf_watermarks.audio import AudioWatermarkSpec
 
         spec = AudioWatermarkSpec()
 
@@ -98,7 +96,7 @@ class TestSpectralWatermarking:
 
     def test_apply_spectral_watermark_mock(self, sample_audio_bytes):
         """Test apply spectral watermark with mocked librosa."""
-        from ciaf.watermarks.audio import (
+        from ciaf_watermarks.audio import (
             apply_audio_spectral_watermark,
             AudioWatermarkSpec,
         )
@@ -106,16 +104,16 @@ class TestSpectralWatermarking:
         spec = AudioWatermarkSpec(strength=0.1, carrier_freq=18000)
 
         try:
-            with patch("ciaf.watermarks.audio.spectral.librosa") as mock_librosa:
+            with patch("ciaf_watermarks.audio.spectral.librosa") as mock_librosa:
                 # Mock audio loading and processing
                 mock_librosa.load.return_value = (np.random.randn(44100), 44100)
-                mock_librosa.stft.return_value = np.random.randn(
+                mock_librosa.stft.return_value = np.random.randn(1025, 100) + 1j * np.random.randn(
                     1025, 100
-                ) + 1j * np.random.randn(1025, 100)
+                )
                 mock_librosa.istft.return_value = np.random.randn(44100)
                 mock_librosa.fft_frequencies.return_value = np.linspace(0, 22050, 1025)
 
-                with patch("ciaf.watermarks.audio.spectral.sf") as mock_sf:
+                with patch("ciaf_watermarks.audio.spectral.sf") as mock_sf:
                     mock_sf.write.return_value = None
 
                     with patch("builtins.open", create=True) as mock_open:
@@ -135,7 +133,7 @@ class TestSpectralWatermarking:
 
     def test_apply_spectral_watermark_different_bands(self, sample_audio_bytes):
         """Test spectral watermarking with different frequency bands."""
-        from ciaf.watermarks.audio import (
+        from ciaf_watermarks.audio import (
             apply_audio_spectral_watermark,
             AudioWatermarkSpec,
         )
@@ -145,22 +143,18 @@ class TestSpectralWatermarking:
                 spec = AudioWatermarkSpec(
                     strength=0.1,
                     frequency_band=band,
-                    carrier_freq=(
-                        5000 if band == "low" else (10000 if band == "mid" else 18000)
-                    ),
+                    carrier_freq=(5000 if band == "low" else (10000 if band == "mid" else 18000)),
                 )
 
-                with patch("ciaf.watermarks.audio.spectral.librosa") as mock_librosa:
+                with patch("ciaf_watermarks.audio.spectral.librosa") as mock_librosa:
                     mock_librosa.load.return_value = (np.random.randn(44100), 44100)
                     mock_librosa.stft.return_value = np.random.randn(
                         1025, 100
                     ) + 1j * np.random.randn(1025, 100)
                     mock_librosa.istft.return_value = np.random.randn(44100)
-                    mock_librosa.fft_frequencies.return_value = np.linspace(
-                        0, 22050, 1025
-                    )
+                    mock_librosa.fft_frequencies.return_value = np.linspace(0, 22050, 1025)
 
-                    with patch("ciaf.watermarks.audio.spectral.sf") as mock_sf:
+                    with patch("ciaf_watermarks.audio.spectral.sf") as mock_sf:
                         mock_sf.write.return_value = None
 
                         with patch("builtins.open", create=True) as mock_open:
@@ -180,25 +174,23 @@ class TestSpectralWatermarking:
 
     def test_apply_with_spread_spectrum(self, sample_audio_bytes):
         """Test spectral watermarking with spread spectrum enabled."""
-        from ciaf.watermarks.audio import (
+        from ciaf_watermarks.audio import (
             apply_audio_spectral_watermark,
             AudioWatermarkSpec,
         )
 
-        spec = AudioWatermarkSpec(
-            strength=0.1, carrier_freq=18000, spread_spectrum=True
-        )
+        spec = AudioWatermarkSpec(strength=0.1, carrier_freq=18000, spread_spectrum=True)
 
         try:
-            with patch("ciaf.watermarks.audio.spectral.librosa") as mock_librosa:
+            with patch("ciaf_watermarks.audio.spectral.librosa") as mock_librosa:
                 mock_librosa.load.return_value = (np.random.randn(44100), 44100)
-                mock_librosa.stft.return_value = np.random.randn(
+                mock_librosa.stft.return_value = np.random.randn(1025, 100) + 1j * np.random.randn(
                     1025, 100
-                ) + 1j * np.random.randn(1025, 100)
+                )
                 mock_librosa.istft.return_value = np.random.randn(44100)
                 mock_librosa.fft_frequencies.return_value = np.linspace(0, 22050, 1025)
 
-                with patch("ciaf.watermarks.audio.spectral.sf") as mock_sf:
+                with patch("ciaf_watermarks.audio.spectral.sf") as mock_sf:
                     mock_sf.write.return_value = None
 
                     with patch("builtins.open", create=True) as mock_open:
@@ -224,7 +216,7 @@ class TestSpectralWatermarkExtraction:
 
     def test_extract_spectral_watermark_mock(self, sample_audio_bytes):
         """Test extracting spectral watermark."""
-        from ciaf.watermarks.audio import (
+        from ciaf_watermarks.audio import (
             extract_audio_spectral_watermark,
             AudioWatermarkSpec,
         )
@@ -232,11 +224,11 @@ class TestSpectralWatermarkExtraction:
         spec = AudioWatermarkSpec(strength=0.1, carrier_freq=18000)
 
         try:
-            with patch("ciaf.watermarks.audio.spectral.librosa") as mock_librosa:
+            with patch("ciaf_watermarks.audio.spectral.librosa") as mock_librosa:
                 mock_librosa.load.return_value = (np.random.randn(44100), 44100)
-                mock_librosa.stft.return_value = np.random.randn(
+                mock_librosa.stft.return_value = np.random.randn(1025, 100) + 1j * np.random.randn(
                     1025, 100
-                ) + 1j * np.random.randn(1025, 100)
+                )
                 mock_librosa.fft_frequencies.return_value = np.linspace(0, 22050, 1025)
 
                 with patch("builtins.open", create=True) as mock_open:
@@ -252,24 +244,22 @@ class TestSpectralWatermarkExtraction:
                     # Should return string or None
                     assert extracted is None or isinstance(extracted, str)
         except (ImportError, AttributeError):
-            pytest.skip(
-                "extract_audio_spectral_watermark not implemented or librosa not available"
-            )
+            pytest.skip("extract_audio_spectral_watermark not implemented or librosa not available")
 
     def test_extract_from_unwatermarked_audio(self, sample_audio_bytes):
         """Test extraction from unwatermarked audio returns None."""
-        from ciaf.watermarks.audio import AudioWatermarkSpec
+        from ciaf_watermarks.audio import AudioWatermarkSpec
 
         spec = AudioWatermarkSpec()
 
         try:
-            from ciaf.watermarks.audio import extract_audio_spectral_watermark
+            from ciaf_watermarks.audio import extract_audio_spectral_watermark
 
-            with patch("ciaf.watermarks.audio.spectral.librosa") as mock_librosa:
+            with patch("ciaf_watermarks.audio.spectral.librosa") as mock_librosa:
                 mock_librosa.load.return_value = (np.random.randn(44100), 44100)
-                mock_librosa.stft.return_value = np.random.randn(
+                mock_librosa.stft.return_value = np.random.randn(1025, 100) + 1j * np.random.randn(
                     1025, 100
-                ) + 1j * np.random.randn(1025, 100)
+                )
                 mock_librosa.fft_frequencies.return_value = np.linspace(0, 22050, 1025)
 
                 with patch("builtins.open", create=True) as mock_open:
@@ -295,7 +285,7 @@ class TestSpectralWatermarkRobustness:
         """Test that spectral watermark survives compression (conceptually)."""
         # This would require actual audio processing which is mocked
         # But we test the interface
-        from ciaf.watermarks.audio import AudioWatermarkSpec
+        from ciaf_watermarks.audio import AudioWatermarkSpec
 
         spec = AudioWatermarkSpec(strength=0.2)  # Higher strength
 
@@ -304,7 +294,7 @@ class TestSpectralWatermarkRobustness:
 
     def test_watermark_strength_affects_robustness(self):
         """Test that higher strength improves robustness."""
-        from ciaf.watermarks.audio import AudioWatermarkSpec
+        from ciaf_watermarks.audio import AudioWatermarkSpec
 
         weak_spec = AudioWatermarkSpec(strength=0.05)
         strong_spec = AudioWatermarkSpec(strength=0.2)

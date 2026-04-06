@@ -1,5 +1,5 @@
 """
-Tests for ciaf.watermarks.text module.
+Tests for ciaf_watermarks.text module.
 
 Tests cover:
 - Text watermark application (footer, header, inline)
@@ -10,7 +10,7 @@ Tests cover:
 """
 
 import pytest
-from ciaf.watermarks.text import (
+from ciaf_watermarks.text import (
     apply_text_watermark,
     extract_watermark_id,
     extract_verification_url,
@@ -20,7 +20,7 @@ from ciaf.watermarks.text import (
     quick_watermark_text,
     verify_text_artifact,
 )
-from ciaf.watermarks.models import ArtifactType, WatermarkType
+from ciaf_watermarks.models import ArtifactType, WatermarkType
 
 
 @pytest.mark.unit
@@ -94,7 +94,9 @@ class TestWatermarkExtraction:
 
     def test_extract_watermark_id_from_footer(self):
         """Test extracting watermark ID from footer."""
-        watermarked = "Text content\n\n---\nAI Provenance Tag: wmk-extract-test\nVerify: https://test.com"
+        watermarked = (
+            "Text content\n\n---\nAI Provenance Tag: wmk-extract-test\nVerify: https://test.com"
+        )
 
         watermark_id = extract_watermark_id(watermarked)
         assert watermark_id == "wmk-extract-test"
@@ -198,9 +200,7 @@ class TestTextEvidenceBuilding:
         assert evidence.hashes.simhash_after is not None
         assert len(evidence.fingerprints) >= 2  # SimHash fingerprints
 
-    def test_build_evidence_different_styles(
-        self, sample_text, common_watermark_params
-    ):
+    def test_build_evidence_different_styles(self, sample_text, common_watermark_params):
         """Test building evidence with different watermark styles."""
         for style in ["footer", "header", "inline"]:
             evidence, watermarked = build_text_artifact_evidence(
@@ -230,9 +230,7 @@ class TestQuickWatermark:
 class TestTextVerification:
     """Test text verification functions."""
 
-    def test_verify_exact_match_after_watermark(
-        self, sample_text, common_watermark_params
-    ):
+    def test_verify_exact_match_after_watermark(self, sample_text, common_watermark_params):
         """Test verification with exact match (watermarked version)."""
         evidence, watermarked = build_text_artifact_evidence(
             raw_text=sample_text, **common_watermark_params
