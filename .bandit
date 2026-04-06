@@ -1,0 +1,22 @@
+[bandit]
+# Bandit configuration for ciaf-watermarks
+# https://bandit.readthedocs.io/en/latest/config.html
+
+# Exclude test directories from security scanning
+# Tests use assert statements which is standard practice
+exclude_dirs = 
+    /test_watermarks/
+    /tests/
+    /.git/
+    /.tox/
+    /build/
+    /dist/
+    /*.egg-info/
+
+# Skip B101 (assert_used) for any remaining test files
+# Using assert in tests is correct and standard practice
+skips = B101
+
+# Set confidence level (HIGH, MEDIUM, LOW)
+# Only report HIGH and MEDIUM confidence issues
+#confidence = HIGH
