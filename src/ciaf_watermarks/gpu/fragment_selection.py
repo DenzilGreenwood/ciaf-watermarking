@@ -110,7 +110,7 @@ def gpu_select_image_fragments(
         patch_bytes = patch_array.tobytes()
         patch_hash = sha256_bytes(patch_bytes)
 
-        fragment = ImageForensicFragment(
+        fragment = ImageForensicFragment(  # type: ignore[call-arg]
             fragment_id=f"img_patch_{idx}",
             created_at="",  # Will be set by caller
             fragment_type="image_patch",
@@ -198,8 +198,8 @@ def gpu_select_video_fragments(
         frames_resized = []
 
         for frame in frames:
-            img = Image.fromarray(frame)
-            img = img.resize(target_size)
+            img = Image.fromarray(frame)  # type: ignore[assignment]
+            img = img.resize(target_size)  # type: ignore[assignment]
             frames_resized.append(np.array(img))
 
         frames_tensor = torch.from_numpy(np.stack(frames_resized)).float().to(device)
@@ -236,7 +236,7 @@ def gpu_select_video_fragments(
                 frame_bytes = f.read()
                 frame_hash = sha256_bytes(frame_bytes)
 
-            snippet = VideoForensicSnippet(
+            snippet = VideoForensicSnippet(  # type: ignore[call-arg]
                 fragment_id=f"video_frame_{frame_num}",
                 created_at="",
                 fragment_type="video_keyframe",

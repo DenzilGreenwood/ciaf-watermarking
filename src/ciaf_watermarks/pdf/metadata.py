@@ -19,7 +19,7 @@ Version: 1.0.0
 
 from __future__ import annotations
 
-from typing import Tuple, Optional, Dict, TYPE_CHECKING
+from typing import Tuple, Optional, Dict, Any, TYPE_CHECKING
 from io import BytesIO
 import uuid
 
@@ -27,18 +27,18 @@ if TYPE_CHECKING:
     from ciaf.watermarks.models import ArtifactEvidence, VerificationResult
 
 try:
-    from pypdf import PdfReader, PdfWriter
+    from pypdf import PdfReader, PdfWriter  # type: ignore[import-untyped, assignment]
 
     PYPDF_AVAILABLE = True
 except ImportError:
     try:
-        from PyPDF2 import PdfReader, PdfWriter
+        from PyPDF2 import PdfReader, PdfWriter  # type: ignore[import-untyped, assignment, no-redef]
 
         PYPDF_AVAILABLE = True
     except ImportError:
         PYPDF_AVAILABLE = False
-        PdfReader = None
-        PdfWriter = None
+        PdfReader = None  # type: ignore[assignment, misc]
+        PdfWriter = None  # type: ignore[assignment, misc]
 
 
 def apply_pdf_metadata_watermark(
@@ -84,7 +84,7 @@ def apply_pdf_metadata_watermark(
         writer.add_page(page)
 
     # Preserve existing metadata
-    existing_metadata = reader.metadata or {}
+    existing_metadata: Dict[str, Any] = reader.metadata or {}  # type: ignore[assignment]
 
     # Build watermark metadata
     metadata = {
@@ -98,17 +98,17 @@ def apply_pdf_metadata_watermark(
 
     # Preserve original producer if exists
     if "/Producer" in existing_metadata:
-        metadata["/Producer"] = existing_metadata["/Producer"]
+        metadata["/Producer"] = str(existing_metadata["/Producer"])
     else:
         metadata["/Producer"] = "CIAF Watermarking System v1.0"
 
     # Preserve title if exists
     if "/Title" in existing_metadata:
-        metadata["/Title"] = existing_metadata["/Title"]
+        metadata["/Title"] = str(existing_metadata["/Title"])
 
     # Preserve author if exists
     if "/Author" in existing_metadata:
-        metadata["/Author"] = existing_metadata["/Author"]
+        metadata["/Author"] = str(existing_metadata["/Author"])
 
     # Add custom metadata if provided
     if additional_metadata:
@@ -120,7 +120,7 @@ def apply_pdf_metadata_watermark(
     # Add CIAF-specific metadata
     metadata["/CIAF_ArtifactID"] = artifact_id
     metadata["/CIAF_WatermarkID"] = watermark_id
-    metadata["/CIAF_VerificationURL"] = verification_url
+    metadata["/CIAF_VerificationURL"] = verification_url or ""
     metadata["/CIAF_ModelID"] = model_id
 
     # Set metadata
@@ -156,30 +156,30 @@ def extract_pdf_metadata_watermark(pdf_bytes: bytes) -> Optional[Dict[str, str]]
         watermark_info = {}
 
         if "/CIAF_ArtifactID" in metadata:
-            watermark_info["artifact_id"] = metadata["/CIAF_ArtifactID"]
+            watermark_info["artifact_id"] = str(metadata["/CIAF_ArtifactID"])  # type: ignore[index]
 
         if "/CIAF_WatermarkID" in metadata:
-            watermark_info["watermark_id"] = metadata["/CIAF_WatermarkID"]
+            watermark_info["watermark_id"] = str(metadata["/CIAF_WatermarkID"])  # type: ignore[index]
 
         if "/CIAF_VerificationURL" in metadata:
-            watermark_info["verification_url"] = metadata["/CIAF_VerificationURL"]
+            watermark_info["verification_url"] = str(metadata["/CIAF_VerificationURL"])  # type: ignore[index]
 
         if "/CIAF_ModelID" in metadata:
-            watermark_info["model_id"] = metadata["/CIAF_ModelID"]
+            watermark_info["model_id"] = str(metadata["/CIAF_ModelID"])  # type: ignore[index]
 
         # Also check Subject field for watermark
-        if "/Subject" in metadata:
-            subject = metadata["/Subject"]
+        if "/Subject" in metadata:  # type: ignore[operator]
+            subject = str(metadata["/Subject"])
             if "Watermark:" in subject or "CIAF" in subject:
                 watermark_info["subject"] = subject
 
         # Check Keywords field
-        if "/Keywords" in metadata:
-            keywords = metadata["/Keywords"]
+        if "/Keywords" in metadata:  # type: ignore[operator]
+            keywords = str(metadata["/Keywords"])
             if "CIAF-Watermarked" in keywords or "AI-Generated" in keywords:
                 watermark_info["keywords"] = keywords
 
-        return watermark_info if watermark_info else None
+        return watermark_info if watermark_info else None  # type: ignore[return-value]
 
     except Exception:
         return None

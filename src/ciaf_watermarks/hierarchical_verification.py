@@ -394,6 +394,16 @@ def verify_text_artifact_hierarchical(
         final_tier=VerificationTier.NO_MATCH,
         is_authentic=False,
         overall_confidence=0.0,
+        tier1_result=None,
+        tier2_result=None,
+        tier3_result=None,
+        total_execution_time_ms=0.0,
+        tier1_cost_ms=0.0,
+        tier2_cost_ms=0.0,
+        tier3_cost_ms=0.0,
+        tier2_fragment_results=None,
+        tier3_similarity_score=None,
+        evidence_record=None,
     )
 
     total_start = time.time()
@@ -527,6 +537,16 @@ def verify_image_artifact_hierarchical(
         final_tier=VerificationTier.NO_MATCH,
         is_authentic=False,
         overall_confidence=0.0,
+        tier1_result=None,
+        tier2_result=None,
+        tier3_result=None,
+        total_execution_time_ms=0.0,
+        tier1_cost_ms=0.0,
+        tier2_cost_ms=0.0,
+        tier3_cost_ms=0.0,
+        tier2_fragment_results=None,
+        tier3_similarity_score=None,
+        evidence_record=None,
     )
     result.notes.append("Image hierarchical verification: Phase 2 - Not yet implemented")
     return result

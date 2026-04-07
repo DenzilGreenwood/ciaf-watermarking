@@ -192,6 +192,7 @@ def verify_text_fragments(
                     fragment_id=fragment.fragment_id,
                     matched=False,
                     confidence=0.0,
+                    match_position=None,
                     match_details="Not found in suspect text",
                 )
             )
@@ -354,6 +355,7 @@ def verify_image_fragments(
                     fragment_id=fragment.fragment_id,
                     matched=False,
                     confidence=0.0,
+                    match_position=None,
                     match_details="Patch not found in suspect image",
                 )
             )

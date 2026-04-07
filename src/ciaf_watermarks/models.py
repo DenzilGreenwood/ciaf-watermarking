@@ -319,9 +319,13 @@ class ForensicFragmentSet(BaseModel):
     @property
     def all_fragments(self) -> List[ForensicFragment]:
         """Get all fragments regardless of type."""
-        return (
-            self.text_fragments + self.image_fragments + self.video_snippets + self.audio_segments
-        )
+        # Type: ignore because list concatenation with subclasses
+        result: List[ForensicFragment] = []
+        result.extend(self.text_fragments)  # type: ignore[arg-type]
+        result.extend(self.image_fragments)  # type: ignore[arg-type]
+        result.extend(self.video_snippets)  # type: ignore[arg-type]
+        result.extend(self.audio_segments)  # type: ignore[arg-type]
+        return result
 
 
 class ArtifactHashSet(BaseModel):

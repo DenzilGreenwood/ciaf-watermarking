@@ -63,7 +63,10 @@ def gpu_perceptual_hash_image(image_bytes: bytes, device: str = "cuda") -> str:
     img = Image.open(io.BytesIO(image_bytes)).convert("L")  # Grayscale
 
     # Resize to 32x32 (standard for pHash)
-    img = img.resize((32, 32), Image.LANCZOS)
+    try:
+        img = img.resize((32, 32), Image.LANCZOS)  # type: ignore[attr-defined]
+    except AttributeError:
+        img = img.resize((32, 32), Image.Resampling.LANCZOS)  # type: ignore[attr-defined]
 
     # Convert to numpy array
     img_array = np.array(img, dtype=np.float32)
@@ -134,7 +137,10 @@ def gpu_perceptual_hash_batch_images(
         imgs = []
         for img_bytes in batch:
             img = Image.open(io.BytesIO(img_bytes)).convert("L")
-            img = img.resize((32, 32), Image.LANCZOS)
+            try:
+                img = img.resize((32, 32), Image.LANCZOS)  # type: ignore[attr-defined]
+            except AttributeError:
+                img = img.resize((32, 32), Image.Resampling.LANCZOS)  # type: ignore[attr-defined]
             imgs.append(np.array(img, dtype=np.float32))
 
         # Stack into batch tensor

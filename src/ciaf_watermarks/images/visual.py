@@ -34,15 +34,15 @@ if TYPE_CHECKING:
     from ciaf.watermarks.models import ArtifactEvidence
 
 try:
-    from PIL import Image, ImageDraw, ImageFont, ImageEnhance
+    from PIL import Image, ImageDraw, ImageFont, ImageEnhance  # type: ignore[import-untyped]
 
     PIL_AVAILABLE = True
 except ImportError:
     PIL_AVAILABLE = False
-    Image = None
-    ImageDraw = None
-    ImageFont = None
-    ImageEnhance = None
+    Image = None  # type: ignore[assignment, misc]
+    ImageDraw = None  # type: ignore[assignment, misc]
+    ImageFont = None  # type: ignore[assignment, misc]
+    ImageEnhance = None  # type: ignore[assignment, misc]
 
 
 Position = Literal[
@@ -126,7 +126,7 @@ def apply_visual_watermark(
         try:
             font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", font_size)
         except Exception:
-            font = ImageFont.load_default()
+            font = ImageFont.load_default()  # type: ignore[assignment]
 
     # Get text size
     bbox = draw.textbbox((0, 0), text, font=font)
@@ -134,7 +134,7 @@ def apply_visual_watermark(
     text_h = bbox[3] - bbox[1]
 
     # Calculate position
-    x, y = _calculate_position(position, base.width, base.height, text_w, text_h, margin)
+    x, y = _calculate_position(position, base.width, base.height, int(text_w), int(text_h), margin)
 
     # Draw text with opacity
     alpha = max(0, min(255, int(255 * opacity)))
@@ -175,11 +175,14 @@ def apply_qr_watermark(
         raise ImportError("Pillow required.")
 
     # Open images
-    img = Image.open(BytesIO(image_bytes))
+    img: Image.Image = Image.open(BytesIO(image_bytes))  # type: ignore[assignment]
     qr_img = Image.open(BytesIO(qr_bytes))
 
-    # Resize QR code
-    qr_img = qr_img.resize((qr_size, qr_size), Image.LANCZOS)
+    # Resize QR code (use LANCZOS if available, otherwise BICUBIC)
+    try:
+        qr_img = qr_img.resize((qr_size, qr_size), Image.LANCZOS)  # type: ignore[attr-defined, assignment]
+    except AttributeError:
+        qr_img = qr_img.resize((qr_size, qr_size), Image.Resampling.LANCZOS)  # type: ignore[attr-defined, assignment]
 
     # Convert to RGBA
     base = img.convert("RGBA")

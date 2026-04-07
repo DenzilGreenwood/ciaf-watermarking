@@ -634,6 +634,11 @@ class CloudFragmentStorage:
                     "Install with: pip install azure-storage-blob"
                 )
 
+            if not config.azure_connection_string:
+                raise ValueError("azure_connection_string is required for Azure provider")
+            if not config.azure_container:
+                raise ValueError("azure_container is required for Azure provider")
+
             self.blob_service_client = BlobServiceClient.from_connection_string(
                 config.azure_connection_string
             )
@@ -688,6 +693,9 @@ class CloudFragmentStorage:
 
                 return f"https://{self.blob_service_client.account_name}.blob.core.windows.net/{self.container}/{blob_name}"
 
+            else:
+                raise ValueError(f"Unsupported provider: {self.provider}")
+
         except Exception as e:
             raise RuntimeError(f"Failed to upload fragment: {e}")
 
@@ -722,6 +730,9 @@ class CloudFragmentStorage:
 
                 return blob_client.download_blob().readall()
 
+            else:
+                raise ValueError(f"Unsupported provider: {self.provider}")
+
         except Exception as e:
             raise RuntimeError(f"Failed to download fragment: {e}")
 
@@ -755,6 +766,9 @@ class CloudFragmentStorage:
 
                 return [blob.name.replace("fragments/", "") for blob in blobs]
 
+            else:
+                raise ValueError(f"Unsupported provider: {self.provider}")
+
         except Exception as e:
             raise RuntimeError(f"Failed to list fragments: {e}")
 
@@ -783,6 +797,9 @@ class CloudFragmentStorage:
                 )
                 blob_client.delete_blob()
                 return True
+
+            else:
+                raise ValueError(f"Unsupported provider: {self.provider}")
 
         except Exception:
             return False
@@ -1333,7 +1350,7 @@ def detect_objects_in_video(
     # In production, download models from:
     # https://github.com/opencv/opencv/wiki/TensorFlow-Object-Detection-API
 
-    results = []
+    results: List[ObjectDetectionResults] = []
 
     # Would implement with actual model loading:
     # net = cv2.dnn.readNetFromTensorflow('frozen_inference_graph.pb', 'graph.pbtxt')
@@ -1441,12 +1458,13 @@ def enhance_evidence_with_forensic_fragments(
         # Add perceptual hashes
         try:
             hashes = compute_all_hashes(image_bytes)
+            phash, ahash, dhash, whash = hashes
 
             for hash_type, hash_value in [
-                ("phash", hashes.phash),
-                ("ahash", hashes.ahash),
-                ("dhash", hashes.dhash),
-                ("whash", hashes.whash),
+                ("phash", phash),
+                ("ahash", ahash),
+                ("dhash", dhash),
+                ("whash", whash),
             ]:
                 if hash_value:
                     enhanced.fingerprints.append(

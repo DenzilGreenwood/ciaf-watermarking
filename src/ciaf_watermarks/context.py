@@ -345,6 +345,7 @@ def get_context_or_params(
     """
     # If all parameters provided, use them
     if all([model_id, model_version, actor_id]):
+        assert model_id is not None and model_version is not None and actor_id is not None
         return {
             "model_id": model_id,
             "model_version": model_version,

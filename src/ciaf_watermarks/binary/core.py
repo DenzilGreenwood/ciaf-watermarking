@@ -130,9 +130,8 @@ def build_binary_artifact_evidence(
     watermark = WatermarkDescriptor(
         watermark_id=watermark_id,
         watermark_type=WatermarkType.METADATA,
-        watermark_location="appended_block",
+        location="appended_block",
         verification_url=verification_url,
-        applied_at=timestamp,
     )
 
     # 7. Build evidence

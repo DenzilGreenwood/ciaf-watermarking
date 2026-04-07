@@ -24,7 +24,7 @@ Version: 1.2.0
 
 from __future__ import annotations
 
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Optional, Dict, Any
 
 from .models import (
     TextForensicFragment,
@@ -836,6 +836,7 @@ def create_forensic_fragment_set(
     )
 
     try:
+        fragments: List[Any]  # Can be TextForensicFragment, ImageForensicFragment, etc.
         if artifact_type == "text":
             artifact_text = artifact.decode("utf-8") if isinstance(artifact, bytes) else artifact
             fragments = select_text_forensic_fragments(

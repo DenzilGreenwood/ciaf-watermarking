@@ -275,7 +275,7 @@ class WatermarkDispatcher:
         # Dispatch based on artifact type
         if artifact_type == ArtifactType.TEXT:
             return self._watermark_text(
-                artifact,
+                artifact,  # type: ignore[arg-type]
                 common_params,
                 watermark_config,
                 enable_forensic_fragments,
@@ -283,14 +283,14 @@ class WatermarkDispatcher:
 
         elif artifact_type == ArtifactType.IMAGE:
             return self._watermark_image(
-                artifact,
+                artifact,  # type: ignore[arg-type]
                 common_params,
                 watermark_config,
             )
 
         elif artifact_type == ArtifactType.PDF:
             return self._watermark_pdf(
-                artifact,
+                artifact,  # type: ignore[arg-type]
                 common_params,
                 watermark_config,
             )
@@ -311,7 +311,7 @@ class WatermarkDispatcher:
 
         elif artifact_type == ArtifactType.VIDEO:
             return self._watermark_video(
-                artifact,
+                artifact,  # type: ignore[arg-type]
                 common_params,
                 watermark_config,
             )

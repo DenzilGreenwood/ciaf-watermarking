@@ -228,10 +228,10 @@ def build_audio_artifact_evidence(
             # Convert to ArtifactFingerprint
             for frag in fragments:
                 fingerprint = ArtifactFingerprint(
-                    fingerprint_type="audio_segment",
-                    fingerprint_value=frag.model_dump_json(),
+                    role="audio_segment",
+                    value=frag.model_dump_json(),
                     algorithm="spectral_hash",
-                    confidence=frag.spectral_confidence,
+                    confidence=frag.entropy_score,
                 )
                 fingerprints.append(fingerprint)
         except Exception:
@@ -242,9 +242,8 @@ def build_audio_artifact_evidence(
     watermark = WatermarkDescriptor(
         watermark_id=watermark_id,
         watermark_type=watermark_type,
-        watermark_location=watermark_mode,
+        location=watermark_mode,
         verification_url=verification_url,
-        applied_at=timestamp,
     )
 
     # 8. Build evidence

@@ -8,7 +8,7 @@ Author: Denzil James Greenwood
 Version: 1.0.0
 """
 
-from typing import List
+from typing import List, Dict, Any
 import re
 
 from ..models import (
@@ -239,7 +239,7 @@ def analyze_suspect_text(suspect_text: str) -> dict:
     Returns:
         Dictionary of analysis results
     """
-    analysis = {
+    analysis: Dict[str, Any] = {
         "text_length": len(suspect_text),
         "has_ciaf_watermark": has_watermark(suspect_text),
         "watermark_id": extract_watermark_id(suspect_text),

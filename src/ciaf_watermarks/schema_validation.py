@@ -352,7 +352,7 @@ def validate_evidence_batch(evidence_list: List[ArtifactEvidence]) -> Dict[str, 
         - invalid: Number of invalid records
         - errors: Dict mapping artifact_id -> list of errors
     """
-    results = {
+    results: Dict[str, Any] = {
         "total": len(evidence_list),
         "valid": 0,
         "invalid": 0,

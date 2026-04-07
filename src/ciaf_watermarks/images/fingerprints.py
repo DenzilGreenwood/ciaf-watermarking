@@ -35,8 +35,8 @@ try:
     IMAGEHASH_AVAILABLE = True
 except ImportError:
     IMAGEHASH_AVAILABLE = False
-    Image = None
-    imagehash = None
+    Image = None  # type: ignore
+    imagehash = None  # type: ignore
 
 
 @dataclass

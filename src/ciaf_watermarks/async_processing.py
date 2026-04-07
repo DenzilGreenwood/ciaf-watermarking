@@ -33,7 +33,7 @@ from __future__ import annotations
 import threading
 import time
 from enum import Enum
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, Optional, Union, List
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 import queue
@@ -255,9 +255,9 @@ class BackgroundWorker:
         self.max_workers = max_workers
 
         # Priority queue for tasks
-        self._task_queue = queue.PriorityQueue()
+        self._task_queue: queue.PriorityQueue[Any] = queue.PriorityQueue()
         self._running = False
-        self._workers = []
+        self._workers: List[threading.Thread] = []
 
     def start(self) -> None:
         """Start background worker threads."""

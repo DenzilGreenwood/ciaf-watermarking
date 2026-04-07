@@ -38,7 +38,7 @@ try:
     PIL_AVAILABLE = True
 except ImportError:
     PIL_AVAILABLE = False
-    Image = None
+    Image = None  # type: ignore
 
 
 class SteganographyError(Exception):
@@ -137,7 +137,7 @@ def embed_watermark_lsb(
 
     # Convert to RGB if needed (steganography works best with RGB)
     if img.mode not in ("RGB", "RGBA"):
-        img = img.convert("RGB")
+        img = img.convert("RGB")  # type: ignore[assignment]
 
     # Get pixel data
     pixels = list(img.getdata())
@@ -207,7 +207,7 @@ def extract_watermark_lsb(image_bytes: bytes) -> Optional[dict]:
 
     # Convert to RGB if needed
     if img.mode not in ("RGB", "RGBA"):
-        img = img.convert("RGB")
+        img = img.convert("RGB")  # type: ignore[assignment]
 
     pixels = list(img.getdata())
 

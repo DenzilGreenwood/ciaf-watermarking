@@ -169,6 +169,9 @@ class SignatureEnvelope(BaseModel):
                 key_id="unsigned",
                 canonicalization_version="RFC8785-like/1.0",
                 key_backend=KeyBackend.LOCAL,
+                signing_service=None,
+                public_key_ref=None,
+                verification_method=None,
             ),
         )
 

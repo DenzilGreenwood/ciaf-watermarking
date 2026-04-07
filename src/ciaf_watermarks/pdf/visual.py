@@ -26,39 +26,39 @@ if TYPE_CHECKING:
     from ciaf.watermarks.models import ArtifactEvidence
 
 try:
-    from pypdf import PdfReader, PdfWriter, PageObject, Transformation
-    from pypdf.generic import RectangleObject
+    from pypdf import PdfReader, PdfWriter, PageObject, Transformation  # type: ignore[import-untyped, assignment]
+    from pypdf.generic import RectangleObject  # type: ignore[import-untyped, assignment]
 
     PYPDF_AVAILABLE = True
 except ImportError:
     try:
-        from PyPDF2 import PdfReader, PdfWriter
-        from PyPDF2.generic import RectangleObject
+        from PyPDF2 import PdfReader, PdfWriter  # type: ignore[import-untyped, assignment, no-redef]
+        from PyPDF2.generic import RectangleObject  # type: ignore[import-untyped, assignment, no-redef]
 
-        PageObject = None
-        Transformation = None
+        PageObject = None  # type: ignore[assignment, misc]
+        Transformation = None  # type: ignore[assignment, misc]
         PYPDF_AVAILABLE = True
     except ImportError:
         PYPDF_AVAILABLE = False
-        PdfReader = None
-        PdfWriter = None
-        PageObject = None
-        RectangleObject = None
-        Transformation = None
+        PdfReader = None  # type: ignore[assignment, misc]
+        PdfWriter = None  # type: ignore[assignment, misc]
+        PageObject = None  # type: ignore[assignment, misc]
+        RectangleObject = None  # type: ignore[assignment, misc]
+        Transformation = None  # type: ignore[assignment, misc]
 
 try:
-    from reportlab.pdfgen import canvas
-    from reportlab.lib.pagesizes import letter
-    from reportlab.lib.units import inch
-    from PIL import Image as PILImage
+    from reportlab.pdfgen import canvas  # type: ignore[import-untyped]
+    from reportlab.lib.pagesizes import letter  # type: ignore[import-untyped]
+    from reportlab.lib.units import inch  # type: ignore[import-untyped]
+    from PIL import Image as PILImage  # type: ignore[import-untyped]
 
     REPORTLAB_AVAILABLE = True
 except ImportError:
     REPORTLAB_AVAILABLE = False
-    canvas = None
-    letter = None
-    inch = None
-    PILImage = None
+    canvas = None  # type: ignore[assignment]
+    letter = None  # type: ignore[assignment]
+    inch = None  # type: ignore[assignment]
+    PILImage = None  # type: ignore[assignment]
 
 
 QRPosition = Literal["bottom-left", "bottom-center", "bottom-right"]
@@ -494,8 +494,8 @@ def verify_pdf_qr_watermark(pdf_bytes: bytes) -> bool:
 
         # Alternative: Check resources for XObject images
         for page in reader.pages:
-            if "/XObject" in page["/Resources"]:
-                xobjects = page["/Resources"]["/XObject"].get_object()
+            if "/XObject" in page["/Resources"]:  # type: ignore[operator]
+                xobjects = page["/Resources"]["/XObject"].get_object()  # type: ignore[index]
                 for obj in xobjects.values():
                     if obj["/Subtype"] == "/Image":
                         return True
