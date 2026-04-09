@@ -87,3 +87,31 @@ site/
 # OS
 Thumbs.db
 desktop.ini
+
+# Added by ggshield
+.cache_ggshield
+
+# Validation experiments - results and data
+validation_experiments/
+validation_experiments/outputs/
+validation_experiments/results/
+validation_experiments/OPENAI/results/
+validation_experiments/OPENAI/baseline_results/
+validation_experiments/OPENAI/ciaf_validated_collision_test/corpus/
+validation_experiments/OPENAI/ciaf_validated_collision_test/exact_results/
+validation_experiments/OPENAI/ciaf_validated_collision_test/distinctive_anchor_results/
+validation_experiments/OPENAI/ciaf_validated_collision_test/distinctive_anchor_results_mixed/
+validation_experiments/OPENAI/ciaf_validated_collision_test/distinctive_anchor_results_strict/
+validation_experiments/OPENAI/ciaf_validated_collision_test/stratified_audit_50k/
+
+# Kaggle cache
+.cache/
+
+# evidence foldedr 
+evidence/
+
+# output foldedr This is not correct yet
+outputs/
+
+# LLM docs
+LLM_docs/

@@ -9,6 +9,7 @@ Version: 1.0.0
 """
 
 from typing import List
+import os
 import numpy as np
 
 from ..models import ImageForensicFragment, VideoForensicSnippet
@@ -156,14 +157,15 @@ def gpu_select_video_fragments(
         import ffmpeg
         from PIL import Image
         import tempfile
-        import os
         import io
     except ImportError:
         raise ImportError("ffmpeg-python and Pillow are required.")
 
     # Extract frames using ffmpeg
-    input_path = tempfile.mktemp(suffix=".mp4")
-    output_pattern = tempfile.mktemp(suffix="_frame%04d.png")
+    _fd_input_path, input_path = tempfile.mkstemp(suffix=".mp4")
+    os.close(_fd_input_path)
+    _fd_output_pattern, output_pattern = tempfile.mkstemp(suffix="_frame%04d.png")
+    os.close(_fd_output_pattern)
 
     try:
         # Write video

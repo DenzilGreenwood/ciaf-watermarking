@@ -1,0 +1,15 @@
+# Anthropic + CIAF Watermarking Requirements
+# Install with: pip install -r requirements.txt
+
+# Core dependencies
+anthropic>=0.18.0            # Anthropic Claude API client
+ciaf-watermarks>=1.4.0       # Forensic watermarking
+
+# API example dependencies
+fastapi>=0.100.0             # Web framework (for 04_fastapi_api.py)
+uvicorn[standard]>=0.20.0    # ASGI server (for 04_fastapi_api.py)
+pydantic>=2.0.0              # Data validation (for 04_fastapi_api.py)
+
+# Optional: Enhanced security and features
+python-dotenv>=1.0.0         # Load .env files
+slowapi>=0.1.9               # Rate limiting for FastAPI

@@ -12,6 +12,16 @@ exclude_dirs:
 
 # Skip B101 (assert_used) for any remaining test files
 # Using assert in tests is correct and standard practice
+#
+# Skip acceptable low-severity warnings:
+# B110: try-except-pass used for cleanup operations
+# B112: try-except-continue used for resilient loops
+# B404: subprocess module needed for ffmpeg operations
+# B603: subprocess.run without shell=True (safe usage)
 skips:
   - 'B101'
+  - 'B110'
+  - 'B112'
+  - 'B404'
+  - 'B603'
 

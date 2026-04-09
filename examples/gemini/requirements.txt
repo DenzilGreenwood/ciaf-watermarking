@@ -1,0 +1,91 @@
+# Gemini + CIAF Watermarking Integration Requirements
+
+# ============================================================================
+# CORE DEPENDENCIES
+# ============================================================================
+
+# CIAF Watermarking Package
+ciaf-watermarks>=1.4.0
+
+# Google Gemini API
+google-generativeai>=0.3.0
+
+# ============================================================================
+# OPTIONAL DEPENDENCIES (based on your needs)
+# ============================================================================
+
+# --- For MongoDB Evidence Storage ---
+# Uncomment if using MongoDB vault instead of JSON files
+# pymongo>=4.6.0
+# motor>=3.3.0  # For async MongoDB operations
+
+# --- For Web API Integration ---
+# Uncomment if building REST API endpoints
+# fastapi>=0.104.0
+# uvicorn[standard]>=0.24.0
+# pydantic>=2.5.0
+
+# --- For Async Processing ---
+# Uncomment if using background evidence generation
+# aiohttp>=3.9.0
+# asyncio>=3.4.3
+
+# --- For AWS S3 Evidence Storage ---
+# Uncomment if storing evidence in S3
+# boto3>=1.34.0
+# botocore>=1.34.0
+
+# --- For Encryption ---
+# Uncomment if encrypting evidence at rest
+# cryptography>=41.0.0
+
+# --- For Enhanced Logging ---
+# Uncomment for structured logging
+# loguru>=0.7.0
+# python-json-logger>=2.0.7
+
+# --- For Metrics/Monitoring ---
+# Uncomment if using Prometheus metrics
+# prometheus-client>=0.19.0
+
+# --- For Rate Limiting ---
+# Uncomment if implementing rate limiting
+# slowapi>=0.1.9
+
+# ============================================================================
+# DEVELOPMENT DEPENDENCIES
+# ============================================================================
+
+# Testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+pytest-cov>=4.1.0
+pytest-mock>=3.12.0
+
+# Code Quality
+mypy>=1.7.0
+flake8>=6.1.0
+black>=23.11.0
+isort>=5.12.0
+
+# Type Stubs
+types-requests>=2.31.0
+
+# ============================================================================
+# INSTALLATION INSTRUCTIONS
+# ============================================================================
+
+# Basic installation (required only):
+# pip install ciaf-watermarks google-generativeai
+
+# With MongoDB support:
+# pip install ciaf-watermarks google-generativeai pymongo
+
+# With web API support:
+# pip install ciaf-watermarks google-generativeai fastapi uvicorn
+
+# Development installation (all tools):
+# pip install -r requirements.txt
+
+# Install from this file:
+# pip install -r requirements.txt

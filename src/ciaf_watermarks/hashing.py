@@ -128,7 +128,7 @@ class SimHash:
     @staticmethod
     def _hash_token(token: str) -> int:
         """Hash a single token to 64-bit integer."""
-        h = hashlib.md5(token.encode("utf-8")).digest()
+        h = hashlib.md5(token.encode("utf-8"), usedforsecurity=False).digest()
         return int.from_bytes(h[:8], byteorder="big")
 
     @classmethod

@@ -5,7 +5,7 @@ Watermark application, extraction, and manipulation.
 
 Created: 2026-04-05
 Author: Denzil James Greenwood
-Version: 1.0.0
+Version: 1.5.0
 """
 
 import re
@@ -77,7 +77,8 @@ def _apply_inline_watermark(
 
     if match:
         pos = match.end()
-        tag = f" [AI Generated: {watermark_id[:8]}...]"
+        # Store full watermark ID for exact verification
+        tag = f" [AI Generated: {watermark_id}]"
         return text[:pos] + tag + text[pos:]
     else:
         # No paragraph break, use footer

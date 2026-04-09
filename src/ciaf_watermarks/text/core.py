@@ -5,11 +5,14 @@ Main text artifact evidence building.
 
 Created: 2026-04-05
 Author: Denzil James Greenwood
-Version: 1.0.0
+Version: 1.5.0
 """
 
 import uuid
+import logging
 from typing import Optional, Dict, Any, Tuple
+
+logger = logging.getLogger(__name__)
 
 from ..models import (
     ArtifactEvidence,
@@ -138,6 +141,30 @@ def build_text_artifact_evidence(
             )
         )
 
+    # Distinctive Anchor Fingerprints (Forensic Layer)
+    # Validated at 1.19 × 10⁻⁸ collision rate on 104k document corpus
+    # Import and execution are optional - graceful degradation if unavailable
+    try:
+        from ..forensics.text import compute_distinctive_anchor_fingerprint, VALIDATION_METADATA
+
+        anchor_fingerprint = compute_distinctive_anchor_fingerprint(raw_text)
+
+        # Add anchor fingerprint to evidence
+        # Note: 0.95 is a heuristic policy weight, not a calibrated probability
+        fingerprints.append(
+            ArtifactFingerprint(
+                algorithm="distinctive_anchor_v1",
+                value=anchor_fingerprint.fingerprint_hash,
+                role="forensic_anchor_before_watermark",
+                confidence=0.95,  # Heuristic weight (collision rate is 1.19e-8, not a confidence)
+            )
+        )
+    except Exception as e:
+        # Forensic analysis is optional; don't fail if it doesn't work
+        logger.warning(
+            f"Forensic anchor fingerprinting failed (module or computation): {e}", exc_info=True
+        )
+
     # Build watermark descriptor
     watermark = WatermarkDescriptor(
         watermark_id=watermark_id,
@@ -157,6 +184,25 @@ def build_text_artifact_evidence(
         "text_length_before": len(raw_text),
         "text_length_after": len(watermarked_text),
     }
+
+    # Add forensic anchor metadata if available
+    try:
+        if "anchor_fingerprint" in locals():
+            metadata["forensic_anchor"] = {
+                "version": "distinctive_anchor_v1",
+                "zone_words": anchor_fingerprint.config.zone_word_size,
+                "top_k": anchor_fingerprint.config.top_k,
+                "strong_threshold": anchor_fingerprint.config.strong_threshold,
+                "zone_match_requirement": anchor_fingerprint.config.zone_match_requirement,
+                "validation": VALIDATION_METADATA,
+                "zone_anchors": anchor_fingerprint.to_dict()["zone_anchors"],
+                "fingerprint_hash": anchor_fingerprint.fingerprint_hash,  # Preserve hash for verification
+                "fingerprint_metadata": anchor_fingerprint.metadata,  # Include short_document flags etc
+            }
+    except Exception as e:
+        # Forensic metadata is optional
+        logger.warning(f"Failed to serialize forensic anchor metadata: {e}", exc_info=True)
+
     if additional_metadata:
         metadata.update(additional_metadata)
 

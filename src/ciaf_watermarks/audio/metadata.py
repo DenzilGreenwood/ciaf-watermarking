@@ -68,8 +68,10 @@ def apply_audio_metadata_watermark(
     if not audio_bytes or len(audio_bytes) < 100:
         raise ValueError("Audio data is too small or invalid")
     # Create temporary files
-    input_path = tempfile.mktemp(suffix=".mp3")
-    output_path = tempfile.mktemp(suffix=".mp3")
+    _fd_input_path, input_path = tempfile.mkstemp(suffix=".mp3")
+    os.close(_fd_input_path)
+    _fd_output_path, output_path = tempfile.mkstemp(suffix=".mp3")
+    os.close(_fd_output_path)
 
     try:
         # Write input audio
@@ -151,7 +153,8 @@ def extract_audio_metadata_watermark(audio_bytes: bytes) -> Optional[Dict[str, A
     if not FFMPEG_AVAILABLE:
         return None
 
-    input_path = tempfile.mktemp(suffix=".mp3")
+    _fd_input_path, input_path = tempfile.mkstemp(suffix=".mp3")
+    os.close(_fd_input_path)
 
     try:
         # Write audio to temp file
@@ -231,7 +234,8 @@ def get_audio_info(audio_bytes: bytes) -> Dict[str, Any]:
             "format": "unknown",
         }
 
-    input_path = tempfile.mktemp(suffix=".mp3")
+    _fd_input_path, input_path = tempfile.mkstemp(suffix=".mp3")
+    os.close(_fd_input_path)
 
     try:
         with open(input_path, "wb") as f:

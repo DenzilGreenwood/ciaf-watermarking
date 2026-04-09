@@ -9,6 +9,7 @@ Version: 1.0.0
 """
 
 from typing import List
+import os
 import numpy as np
 
 # Check if PyTorch with CUDA is available
@@ -184,14 +185,15 @@ def gpu_perceptual_hash_video(video_bytes: bytes, device: str = "cuda") -> str:
         import ffmpeg
         from PIL import Image  # noqa: F401
         import tempfile
-        import os
         import io  # noqa: F401
     except ImportError:
         raise ImportError("ffmpeg-python and Pillow are required.")
 
     # Extract keyframes using ffmpeg
-    input_path = tempfile.mktemp(suffix=".mp4")
-    output_pattern = tempfile.mktemp(suffix="_frame%03d.png")
+    _fd_input_path, input_path = tempfile.mkstemp(suffix=".mp4")
+    os.close(_fd_input_path)
+    _fd_output_pattern, output_pattern = tempfile.mkstemp(suffix="_frame%03d.png")
+    os.close(_fd_output_pattern)
 
     try:
         # Write video to temp file

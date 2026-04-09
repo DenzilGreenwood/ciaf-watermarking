@@ -1,0 +1,16 @@
+# ignore the .env files in the gemini and openai folers
+# gemini
+gemini/.env*
+gemini/implementatation/.env*
+
+# openai
+openai/.env*
+openai/implementation/.env*
+
+# anthropic
+anthropic/.env*
+anthropic/implementation/.env*
+
+# Evidence directories (generated when running examples)
+*/evidence/
+**/evidence/

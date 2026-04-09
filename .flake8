@@ -10,6 +10,7 @@ exclude =
     venv,
     build,
     dist,
-    htmlcov_watermarks
+    htmlcov_watermarks,
+    validation_experiments
 per-file-ignores =
     __init__.py:F401

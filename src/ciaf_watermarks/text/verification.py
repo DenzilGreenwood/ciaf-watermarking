@@ -5,11 +5,14 @@ Forensic verification of suspect text artifacts against stored evidence.
 
 Created: 2026-04-05
 Author: Denzil James Greenwood
-Version: 1.0.0
+Version: 1.5.0
 """
 
+import logging
 from typing import List, Dict, Any
 import re
+
+logger = logging.getLogger(__name__)
 
 from ..models import (
     ArtifactEvidence,
@@ -133,6 +136,71 @@ def verify_text_artifact(
                 f"[FAIL] SimHash distance too large: {simhash_dist} (threshold: {simhash_threshold})."
             )
 
+    # Check 6.5: Distinctive Anchor Similarity (forensic layer)
+    # Validated at 1.19 × 10⁻⁸ collision rate on 104k document corpus
+    # Zero human-LLM collisions observed, zero cross-model LLM collisions
+    anchor_match_score = None
+    anchor_match = False
+
+    try:
+        from ..forensics.text import (
+            compare_anchor_fingerprints,
+            DistinctiveAnchorFingerprint,
+        )
+
+        # Check if evidence has forensic anchor data
+        if "forensic_anchor" in evidence.metadata:
+            forensic_meta = evidence.metadata["forensic_anchor"]
+
+            # Reconstruct fingerprint from metadata with proper hash preservation
+            evidence_fingerprint = DistinctiveAnchorFingerprint.from_dict(
+                {
+                    "config": {
+                        "zone_word_size": forensic_meta.get("zone_words", 400),
+                        "top_k": forensic_meta.get("top_k", 10),
+                        "strong_threshold": forensic_meta.get("strong_threshold", 0.40),
+                        "zone_match_requirement": forensic_meta.get("zone_match_requirement", 2),
+                    },
+                    "zone_anchors": forensic_meta.get("zone_anchors", {}),
+                    "fingerprint_hash": forensic_meta.get(
+                        "fingerprint_hash", ""
+                    ),  # Use stored hash
+                    "metadata": forensic_meta.get(
+                        "fingerprint_metadata", {}
+                    ),  # Includes short_document flags
+                }
+            )
+
+            # Compare suspect text against evidence fingerprint
+            anchor_result = compare_anchor_fingerprints(
+                suspect_text,
+                evidence_fingerprint,
+            )
+
+            anchor_match = anchor_result.overall_match
+            anchor_match_score = (
+                anchor_result.match_score
+            )  # Mean zone similarity, not calibrated confidence
+
+            if anchor_match:
+                notes.append(
+                    f"[OK] Distinctive anchor fingerprint matches (zones: {anchor_result.matched_zones}/{anchor_result.required_zones}, match score: {anchor_match_score:.3f})."
+                )
+                notes.append(
+                    "  Forensic analysis: Text exhibits same zone-level distinctive patterns."
+                )
+                notes.append(
+                    f"  Zone scores: beginning={anchor_result.zone_scores.get('beginning', 0):.2f}, middle={anchor_result.zone_scores.get('middle', 0):.2f}, end={anchor_result.zone_scores.get('end', 0):.2f}"
+                )
+            else:
+                notes.append(
+                    f"[INFO] Anchor fingerprint weak match (zones: {anchor_result.matched_zones}/{anchor_result.required_zones}, match score: {anchor_match_score:.3f})."
+                )
+    except Exception as e:
+        # Forensic analysis is optional; don't fail verification if it doesn't work
+        logger.warning(f"Forensic anchor comparison failed: {e}", exc_info=True)
+        notes.append("[INFO] Forensic anchor comparison skipped due to error.")
+
     # Check 7: Content modification analysis
     content_modified = False
     if not match_before and not match_after:
@@ -143,17 +211,23 @@ def verify_text_artifact(
             notes.append("[FAIL] No match found - content may be unrelated or heavily modified.")
 
     # Determine overall confidence
+    # Combines multiple verification layers for robust assessment
     confidence = 0.0
     if match_after:
-        confidence = 1.0  # Perfect match
+        confidence = 1.0  # Perfect match to distributed version
     elif match_before:
         confidence = 0.95  # Original content, watermark removed
     elif normalized_match_after or normalized_match_before:
-        confidence = 0.90  # Formatting changes
+        confidence = 0.90  # Formatting changes, content intact
+    elif anchor_match and anchor_match_score:
+        # Forensic anchor match (validated method)
+        # 0.85 multiplier is a heuristic policy decision, not from validation study
+        confidence = max(confidence, 0.85 * anchor_match_score)
     elif perceptual_similarity:
-        confidence = perceptual_similarity
+        # SimHash similarity
+        confidence = max(confidence, perceptual_similarity)
     else:
-        confidence = 0.0  # No match
+        confidence = 0.0  # No match found
 
     return VerificationResult(
         artifact_id=evidence.artifact_id,

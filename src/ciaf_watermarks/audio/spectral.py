@@ -83,8 +83,10 @@ def apply_audio_spectral_watermark(
             "Install with: pip install librosa soundfile"
         )
 
-    input_path = tempfile.mktemp(suffix=".wav")
-    output_path = tempfile.mktemp(suffix=".wav")
+    _fd_input_path, input_path = tempfile.mkstemp(suffix=".wav")
+    os.close(_fd_input_path)
+    _fd_output_path, output_path = tempfile.mkstemp(suffix=".wav")
+    os.close(_fd_output_path)
 
     try:
         # Write input audio
@@ -153,7 +155,8 @@ def extract_audio_spectral_watermark(
     if not LIBROSA_AVAILABLE:
         return None
 
-    input_path = tempfile.mktemp(suffix=".wav")
+    _fd_input_path, input_path = tempfile.mkstemp(suffix=".wav")
+    os.close(_fd_input_path)
 
     try:
         # Write audio
